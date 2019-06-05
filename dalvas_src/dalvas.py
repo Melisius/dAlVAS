@@ -133,9 +133,11 @@ class DALVAS():
         mol = gto.Mole(atom=atom_string, unit="bohr")
         mol.basis = basis_dict
         mol.charge = self.charge
-        if mol.tot_electrons()%2 != 0:
+        try:
+            mol.build()
+        except:
             mol.charge = self.charge - 1
-        mol.build()
+            mol.build()
         S_total = mol.intor('int1e_ovlp_sph')
         S_total[np.abs(S_total)<self.S_zeroing_threshold] = 0
         S_calculation_temp = S_total[:np.sum(self.number_orbitals),:np.sum(self.number_orbitals)]
