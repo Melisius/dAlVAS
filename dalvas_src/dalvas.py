@@ -2,6 +2,7 @@ import numpy as np
 import scipy.linalg
 from dalvas_src import dal_fileloader
 from dalvas_src import result_printer
+from dalvas_src import dalvas_utility
 from pyscf import gto
 
 
@@ -119,6 +120,7 @@ class DALVAS():
             atom_string += atom[0] + " " + str(atom[1]) + " " + str(atom[2]) + " " + str(atom[3]) + "; "
             if atom[0] not in basis_dict:
                 basis_dict[atom[0]] = calculation_basis
+        atom_string_without_targets = atom_string
         for key in label_dict:
             if isinstance(key, int):
                 atom_string += self.coordinates[key][0] + "00 " + str(self.coordinates[key][1]) + " " + str(self.coordinates[key][2]) + " " + str(self.coordinates[key][3]) + "; "
@@ -237,6 +239,27 @@ class DALVAS():
         for key in self.S_mixed:
             self.S_mixed[key] = self.S_mixed[key].T
             
-            
+        # Check sanity
+        Input_C_diag = dalvas_utility.check_C_diagnolize_S(self.S_calculation,self.mo_coefficients)
+        print("Max deviation from input coefficient diagalization of Overlap:",Input_C_diag)
+        if Input_C_diag > 10**-5:
+            print(atom_string_without_targets)
+            print("Input MO coefficients does not diagonalize the overlap matrix.")
+            mol2 = gto.Mole(atom=atom_string_without_targets, unit="bohr")
+            mol2.basis = basis_dict
+            mol2.charge = self.charge
+            try:
+                mol2.build()
+            except:
+                mol2.charge = self.charge - 1
+                mol2.build()
+            if mol2.nao != np.sum(self.number_basisfunctions):
+                print("Number of basis functions in PySCF different from the number of basis functions in DALTON")
+                print("PySCF:",mol2.nao,"basis functions")
+                print("DALTON:",self.number_basisfunctions,"->",np.sum(self.number_basisfunctions),"basis functions")
+                print("PySCF and DALTON is not using the same basis set")
+            else:
+                print("PySCF and DALTON might have different basis set defintions for the chosen basis set")
+            print("")
             
         

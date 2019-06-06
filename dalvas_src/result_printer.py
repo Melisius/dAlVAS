@@ -19,6 +19,10 @@ def punchin_mo_coefficients(CMO,outfile_name):
                     outfile.write('{0:18.13f}'.format(CMO[sym][j,i]))
                 elif np.max(np.abs(CMO[sym][:,i])) < 10000:
                     outfile.write('{0:18.12f}'.format(CMO[sym][j,i]))
+                elif np.max(np.abs(CMO[sym][:,i])) < 100000:
+                    outfile.write('{0:18.11f}'.format(CMO[sym][j,i]))
+                elif np.max(np.abs(CMO[sym][:,i])) < 1000000:
+                    outfile.write('{0:18.10f}'.format(CMO[sym][j,i]))
                 else:
                     print("MO coefficient to large, punchin file will be broken")
     outfile.close()
