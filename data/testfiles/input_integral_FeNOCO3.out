@@ -1,0 +1,3634 @@
+
+
+     ************************************************************************
+     *************** Dalton - An Electronic Structure Program ***************
+     ************************************************************************
+
+    This is output from DALTON release Dalton2019.alpha (2019)
+         ( Web site: http://daltonprogram.org )
+
+   ----------------------------------------------------------------------------
+
+    NOTE:
+     
+    Dalton is an experimental code for the evaluation of molecular
+    properties using (MC)SCF, DFT, CI, and CC wave functions.
+    The authors accept no responsibility for the performance of
+    the code or for the correctness of the results.
+     
+    The code (in whole or part) is provided under a licence and
+    is not to be reproduced for further distribution without
+    the written permission of the authors or their representatives.
+     
+    See the home page "http://daltonprogram.org" for further information.
+     
+    If results obtained with this code are published,
+    the appropriate citations would be both of:
+     
+       K. Aidas, C. Angeli, K. L. Bak, V. Bakken, R. Bast,
+       L. Boman, O. Christiansen, R. Cimiraglia, S. Coriani,
+       P. Dahle, E. K. Dalskov, U. Ekstroem,
+       T. Enevoldsen, J. J. Eriksen, P. Ettenhuber, B. Fernandez,
+       L. Ferrighi, H. Fliegl, L. Frediani, K. Hald, A. Halkier,
+       C. Haettig, H. Heiberg, T. Helgaker, A. C. Hennum,
+       H. Hettema, E. Hjertenaes, S. Hoest, I.-M. Hoeyvik,
+       M. F. Iozzi, B. Jansik, H. J. Aa. Jensen, D. Jonsson,
+       P. Joergensen, J. Kauczor, S. Kirpekar,
+       T. Kjaergaard, W. Klopper, S. Knecht, R. Kobayashi, H. Koch,
+       J. Kongsted, A. Krapp, K. Kristensen, A. Ligabue,
+       O. B. Lutnaes, J. I. Melo, K. V. Mikkelsen, R. H. Myhre,
+       C. Neiss, C. B. Nielsen, P. Norman, J. Olsen,
+       J. M. H. Olsen, A. Osted, M. J. Packer, F. Pawlowski,
+       T. B. Pedersen, P. F. Provasi, S. Reine, Z. Rinkevicius,
+       T. A. Ruden, K. Ruud, V. Rybkin, P. Salek, C. C. M. Samson,
+       A. Sanchez de Meras, T. Saue, S. P. A. Sauer,
+       B. Schimmelpfennig, K. Sneskov, A. H. Steindal,
+       K. O. Sylvester-Hvid, P. R. Taylor, A. M. Teale,
+       E. I. Tellgren, D. P. Tew, A. J. Thorvaldsen, L. Thoegersen,
+       O. Vahtras, M. A. Watson, D. J. D. Wilson, M. Ziolkowski
+       and H. Agren,
+       "The Dalton quantum chemistry program system",
+       WIREs Comput. Mol. Sci. 2014, 4:269–284 (doi: 10.1002/wcms.1172)
+     
+    and
+     
+       Dalton, a molecular electronic structure program,
+       Release Dalton2019.alpha (2019), see http://daltonprogram.org
+   ----------------------------------------------------------------------------
+
+    Authors in alphabetical order (major contribution(s) in parenthesis):
+
+  Kestutis Aidas,           Vilnius University,           Lithuania   (QM/MM)
+  Celestino Angeli,         University of Ferrara,        Italy       (NEVPT2)
+  Keld L. Bak,              UNI-C,                        Denmark     (AOSOPPA, non-adiabatic coupling, magnetic properties)
+  Vebjoern Bakken,          University of Oslo,           Norway      (DALTON; geometry optimizer, symmetry detection)
+  Radovan Bast,             UiT The Arctic U. of Norway,  Norway      (DALTON installation and execution frameworks)
+  Pablo Baudin,             University of Valencia,       Spain       (Cholesky excitation energies)
+  Linus Boman,              NTNU,                         Norway      (Cholesky decomposition and subsystems)
+  Ove Christiansen,         Aarhus University,            Denmark     (CC module)
+  Renzo Cimiraglia,         University of Ferrara,        Italy       (NEVPT2)
+  Sonia Coriani,            Technical Univ. of Denmark,   Denmark     (CC module, MCD in RESPONS)
+  Janusz Cukras,            University of Trieste,        Italy       (MChD in RESPONS)
+  Paal Dahle,               University of Oslo,           Norway      (Parallelization)
+  Erik K. Dalskov,          UNI-C,                        Denmark     (SOPPA)
+  Thomas Enevoldsen,        Univ. of Southern Denmark,    Denmark     (SOPPA)
+  Janus J. Eriksen,         Aarhus University,            Denmark     (Polarizable embedding model, TDA)
+  Rasmus Faber,             University of Copenhagen,     Denmark     (Vib.avg. NMR with SOPPA, parallel AO-SOPPA)
+  Tobias Fahleson,          KTH Stockholm,                Sweden      (Damped cubic response)
+  Berta Fernandez,          U. of Santiago de Compostela, Spain       (doublet spin, ESR in RESPONS)
+  Lara Ferrighi,            Aarhus University,            Denmark     (PCM Cubic response)
+  Heike Fliegl,             University of Oslo,           Norway      (CCSD(R12))
+  Luca Frediani,            UiT The Arctic U. of Norway,  Norway      (PCM)
+  Bin Gao,                  UiT The Arctic U. of Norway,  Norway      (Gen1Int library)
+  Christof Haettig,         Ruhr-University Bochum,       Germany     (CC module)
+  Kasper Hald,              Aarhus University,            Denmark     (CC module)
+  Asger Halkier,            Aarhus University,            Denmark     (CC module)
+  Frederik Beyer Hansen,    University of Copenhagen,     Denmark     (Parallel AO-SOPPA)
+  Erik D. Hedegaard,        Univ. of Southern Denmark,    Denmark     (Polarizable embedding model, QM/MM)
+  Hanne Heiberg,            University of Oslo,           Norway      (geometry analysis, selected one-electron integrals)
+  Trygve Helgaker,          University of Oslo,           Norway      (DALTON; ABACUS, ERI, DFT modules, London, and much more)
+  Alf Christian Hennum,     University of Oslo,           Norway      (Parity violation)
+  Hinne Hettema,            University of Auckland,       New Zealand (quadratic response in RESPONS; SIRIUS supersymmetry)
+  Eirik Hjertenaes,         NTNU,                         Norway      (Cholesky decomposition)
+  Pi A. B. Haase,           University of Copenhagen,     Denmark     (Triplet AO-SOPPA)
+  Maria Francesca Iozzi,    University of Oslo,           Norway      (RPA)
+  Christoph Jacob           TU Braunschweig               Germany     (Frozen density embedding model)
+  Brano Jansik              Technical Univ. of Ostrava    Czech Rep.  (DFT cubic response)
+  Hans Joergen Aa. Jensen,  Univ. of Southern Denmark,    Denmark     (DALTON; SIRIUS, RESPONS, ABACUS modules, London, and much more)
+  Dan Jonsson,              UiT The Arctic U. of Norway,  Norway      (cubic response in RESPONS module)
+  Poul Joergensen,          Aarhus University,            Denmark     (RESPONS, ABACUS, and CC modules)
+  Maciej Kaminski,          University of Warsaw,         Poland      (CPPh in RESPONS)
+  Joanna Kauczor,           Linkoeping University,        Sweden      (Complex polarization propagator (CPP) module)
+  Sheela Kirpekar,          Univ. of Southern Denmark,    Denmark     (Mass-velocity & Darwin integrals)
+  Wim Klopper,              KIT Karlsruhe,                Germany     (R12 code in CC, SIRIUS, and ABACUS modules)
+  Stefan Knecht,            ETH Zurich,                   Switzerland (Parallel CI and MCSCF)
+  Rika Kobayashi,           Australian National Univ.,    Australia   (DIIS in CC, London in MCSCF)
+  Henrik Koch,              NTNU,                         Norway      (CC module, Cholesky decomposition)
+  Jacob Kongsted,           Univ. of Southern Denmark,    Denmark     (Polarizable embedding model, QM/MM)
+  Andrea Ligabue,           University of Modena,         Italy       (CTOCD, AOSOPPA)
+  Nanna H. List             Univ. of Southern Denmark,    Denmark     (Polarizable embedding model)
+  Ola B. Lutnaes,           University of Oslo,           Norway      (DFT Hessian)
+  Juan I. Melo,             University of Buenos Aires,   Argentina   (LRESC, Relativistic Effects on NMR Shieldings)
+  Kurt V. Mikkelsen,        University of Copenhagen,     Denmark     (MC-SCRF and QM/MM)
+  Rolf H. Myhre,            NTNU,                         Norway      (Subsystems and CC3)
+  Christian Neiss,          Univ. Erlangen-Nuernberg,     Germany     (CCSD(R12))
+  Christian B. Nielsen,     University of Copenhagen,     Denmark     (QM/MM)
+  Patrick Norman,           KTH Stockholm,                Sweden      (Cubic response and complex frequency response in RESPONS)
+  Jeppe Olsen,              Aarhus University,            Denmark     (SIRIUS CI/density modules)
+  Jogvan Magnus H. Olsen,   Univ. of Southern Denmark,    Denmark     (Polarizable embedding model, QM/MM)
+  Anders Osted,             Copenhagen University,        Denmark     (QM/MM)
+  Martin J. Packer,         University of Sheffield,      UK          (SOPPA)
+  Filip Pawlowski,          Kazimierz Wielki University,  Poland      (CC3)
+  Morten N. Pedersen,       Univ. of Southern Denmark,    Denmark     (Polarizable embedding model)
+  Thomas B. Pedersen,       University of Oslo,           Norway      (Cholesky decomposition)
+  Patricio F. Provasi,      University of Northeastern,   Argentina   (Analysis of coupling constants in localized orbitals)
+  Zilvinas Rinkevicius,     KTH Stockholm,                Sweden      (open-shell DFT, ESR)
+  Elias Rudberg,            KTH Stockholm,                Sweden      (DFT grid and basis info)
+  Torgeir A. Ruden,         University of Oslo,           Norway      (Numerical derivatives in ABACUS)
+  Kenneth Ruud,             UiT The Arctic U. of Norway,  Norway      (DALTON; ABACUS magnetic properties and much more)
+  Pawel Salek,              KTH Stockholm,                Sweden      (DALTON; DFT code)
+  Claire C. M. Samson       University of Karlsruhe       Germany     (Boys localization, r12 integrals in ERI)
+  Alfredo Sanchez de Meras, University of Valencia,       Spain       (CC module, Cholesky decomposition)
+  Trond Saue,               Paul Sabatier University,     France      (direct Fock matrix construction)
+  Stephan P. A. Sauer,      University of Copenhagen,     Denmark     (SOPPA(CCSD), SOPPA prop., AOSOPPA, vibrational g-factors)
+  Andre S. P. Gomes,        CNRS/Universite de Lille,     France      (Frozen density embedding model)
+  Bernd Schimmelpfennig,    Forschungszentrum Karlsruhe,  Germany     (AMFI module)
+  Kristian Sneskov,         Aarhus University,            Denmark     (Polarizable embedding model, QM/MM)
+  Arnfinn H. Steindal,      UiT The Arctic U. of Norway,  Norway      (parallel QM/MM, Polarizable embedding model)
+  Casper Steinmann,         Univ. of Southern Denmark,    Denmark     (QFIT, Polarizable embedding model)
+  K. O. Sylvester-Hvid,     University of Copenhagen,     Denmark     (MC-SCRF)
+  Peter R. Taylor,          VLSCI/Univ. of Melbourne,     Australia   (Symmetry handling ABACUS, integral transformation)
+  Andrew M. Teale,          University of Nottingham,     England     (DFT-AC, DFT-D)
+  David P. Tew,             University of Bristol,        England     (CCSD(R12))
+  Olav Vahtras,             KTH Stockholm,                Sweden      (triplet response, spin-orbit, ESR, TDDFT, open-shell DFT)
+  Lucas Visscher,           Vrije Universiteit Amsterdam, Netherlands (Frozen density embedding model)
+  David J. Wilson,          La Trobe University,          Australia   (DFT Hessian and DFT magnetizabilities)
+  Hans Agren,               KTH Stockholm,                Sweden      (SIRIUS module, RESPONS, MC-SCRF solvation model)
+ --------------------------------------------------------------------------------
+
+     Date and time (Linux)  : Sun Jun  9 15:50:57 2019
+     Host name              : s11p25.deic.sdu.dk                      
+
+ * Work memory size             :   320000000 =  2.384 gigabytes.
+
+ * Directories for basis set searches:
+   1) /work/sdujk/kjellgren/test
+   2) /gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis
+
+
+Compilation information
+-----------------------
+
+ Who compiled             | kjellgren
+ Host                     | fe1.deic.sdu.dk
+ System                   | Linux-3.10.0-327.36.3.el7.x86_64
+ CMake generator          | Unix Makefiles
+ Processor                | x86_64
+ 64-bit integers          | OFF
+ MPI                      | ON
+ Fortran compiler         | /opt/sys/apps/gcc-7.2.0/openmpi/2.1.2/bin/mpif90
+ Fortran compiler version | GNU Fortran (GCC) 7.2.0
+ C compiler               | /opt/sys/apps/gcc-7.2.0/openmpi/2.1.2/bin/mpicc
+ C compiler version       | gcc (GCC) 7.2.0
+ C++ compiler             | /opt/sys/apps/gcc-7.2.0/openmpi/2.1.2/bin/mpicxx
+ C++ compiler version     | unknown
+ BLAS                     | /lib64/libblas.so
+ LAPACK                   | /lib64/liblapack.so
+ Static linking           | OFF
+ Last Git revision        | 4bbd0b40128eb84fef50606236f8fd13f96f8b30
+ Git branch               | hjaaj-srdft
+ Configuration time       | 2019-06-09 15:50:00.353179
+
+ * MPI parallel run using 24 processes.
+
+
+   Content of the .dal input file
+ ----------------------------------
+
+**DALTON INPUT
+.INTEGRALS
+*MOLBAS
+.PRINT
+ 10
+**END OF DALTON INPUT
+
+
+   Content of the .mol file
+ ----------------------------
+
+ATOMBASIS
+ Title
+ Generated by the Dalton Input File Plugin for Avogadro
+Atomtypes=5 Charge=-1 Nosymmetry
+Charge=26.0 Atoms=1 Basis=cc-pVDZ-DK_ogc
+Fe         0.00092        0.00000        0.37789
+Charge=7.0 Atoms=1 Basis=cc-pVDZ-DK_ogc
+N          0.00062        0.00000        3.51545
+Charge=6.0 Atoms=3 Basis=cc-pVDZ-DK_ogc
+C          2.99855        0.00000       -1.12906
+C         -1.49900       -2.59520       -1.12928
+C         -1.49900        2.59520       -1.12928
+Charge=8.0 Atoms=4 Basis=cc-pVDZ-DK_ogc
+O         -2.50142       -4.32842       -2.08667
+O         -2.50142        4.32842       -2.08667
+O         -0.00024        0.00000        5.77447
+O          5.00100        0.00000       -2.08599
+Charge=26.0 Atoms=1 Basis=MINAO
+Fe00       0.00092        0.00000        0.37789
+
+
+       *******************************************************************
+       *********** Output from DALTON general input processing ***********
+       *******************************************************************
+
+ --------------------------------------------------------------------------------
+   Overall default print level:    0
+   Print level for DALTON.STAT:    1
+
+    Parallel calculation using MPI
+    AO-direct calculation (in sections where implemented)
+    HERMIT 1- and 2-electron integral sections will be executed
+    "Old" integral transformation used (limited to max 255 basis functions)
+ --------------------------------------------------------------------------------
+
+@ * Nuclear model: Point charge.
+
+
+ Changes of defaults for *MOLBAS
+ -------------------------------
+
+ Print level in molecule setup (READIN):   10
+
+
+
+   ****************************************************************************
+   *************** Output of molecule and basis set information ***************
+   ****************************************************************************
+
+
+    The two title cards from your ".mol" input:
+    ------------------------------------------------------------------------
+ 1:  Title                                                                  
+ 2:  Generated by the Dalton Input File Plugin for Avogadro                 
+    ------------------------------------------------------------------------
+
+  Calculation of transformation matrices for spherical GTOs.
+
+
+                            **************************
+                            *** Output from SPHCOM ***
+                            **************************
+
+      LVAL      2
+      NLM       5
+      NXYZ      6
+      MINTEG    2
+
+
+                              +---------------------+
+                              ! Legendre polynomial !
+                              +---------------------+
+
+
+               Column   1     Column   2     Column   3
+       1      -0.50000000     0.00000000     1.50000000
+    ==== End of matrix output ====
+
+
+                            +-------------------------+
+                            ! Cosine and sine factors !
+                            +-------------------------+
+
+
+               Column   1     Column   2     Column   3
+       1       1.00000000     0.00000000     0.00000000
+       2       1.00000000     1.00000000     0.00000000
+       3       1.00000000     2.00000000    -1.00000000
+    ==== End of matrix output ====
+
+
+                  +----------------------------------------------+
+                  ! Cartesian to spherical transformation matrix !
+                  +----------------------------------------------+
+
+                              Moment order: 2
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.00000000    -0.28867513     0.00000000     0.50000000
+       2       1.00000000     0.00000000     0.00000000     0.00000000     0.00000000
+       3       0.00000000     0.00000000     0.00000000     1.00000000     0.00000000
+       4       0.00000000     0.00000000    -0.28867513     0.00000000    -0.50000000
+       5       0.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000     0.57735027     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+
+                            **************************
+                            *** Output from SPHCOM ***
+                            **************************
+
+      LVAL      3
+      NLM       7
+      NXYZ     10
+      MINTEG    2
+
+
+                              +---------------------+
+                              ! Legendre polynomial !
+                              +---------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4
+       1       0.00000000    -1.50000000     0.00000000     2.50000000
+    ==== End of matrix output ====
+
+
+                            +-------------------------+
+                            ! Cosine and sine factors !
+                            +-------------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4
+       1       1.00000000     0.00000000     0.00000000     0.00000000
+       2       1.00000000     1.00000000     0.00000000     0.00000000
+       3       1.00000000     2.00000000    -1.00000000     0.00000000
+       4       1.00000000     3.00000000    -3.00000000    -1.00000000
+    ==== End of matrix output ====
+
+
+                  +----------------------------------------------+
+                  ! Cartesian to spherical transformation matrix !
+                  +----------------------------------------------+
+
+                              Moment order: 3
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.00000000     0.00000000     0.00000000    -0.15811388
+       2       0.61237244     0.00000000    -0.15811388     0.00000000     0.00000000
+       3       0.00000000     0.00000000     0.00000000    -0.38729833     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.00000000    -0.15811388
+       5       0.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000     0.00000000     0.00000000     0.63245553
+       7      -0.20412415     0.00000000    -0.15811388     0.00000000     0.00000000
+       8       0.00000000     0.00000000     0.00000000    -0.38729833     0.00000000
+       9       0.00000000     0.00000000     0.63245553     0.00000000     0.00000000
+      10       0.00000000     0.00000000     0.00000000     0.25819889     0.00000000
+
+               Column   6     Column   7
+       1       0.00000000     0.20412415
+       3       0.50000000     0.00000000
+       4       0.00000000    -0.61237244
+       8      -0.50000000     0.00000000
+    ==== End of matrix output ====
+
+
+                            **************************
+                            *** Output from SPHCOM ***
+                            **************************
+
+      LVAL      4
+      NLM       9
+      NXYZ     15
+      MINTEG    2
+
+
+                              +---------------------+
+                              ! Legendre polynomial !
+                              +---------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.37500000     0.00000000    -3.75000000     0.00000000     4.37500000
+    ==== End of matrix output ====
+
+
+                            +-------------------------+
+                            ! Cosine and sine factors !
+                            +-------------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       1.00000000     0.00000000     0.00000000     0.00000000     0.00000000
+       2       1.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       3       1.00000000     2.00000000    -1.00000000     0.00000000     0.00000000
+       4       1.00000000     3.00000000    -3.00000000    -1.00000000     0.00000000
+       5       1.00000000     4.00000000    -6.00000000    -4.00000000     1.00000000
+    ==== End of matrix output ====
+
+
+                  +----------------------------------------------+
+                  ! Cartesian to spherical transformation matrix !
+                  +----------------------------------------------+
+
+                              Moment order: 4
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.00000000     0.00000000     0.00000000     0.03659625
+       2       0.28867513     0.00000000    -0.10910895     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.00000000     0.07319251
+       5       0.00000000     0.61237244     0.00000000    -0.23145502     0.00000000
+       6       0.00000000     0.00000000     0.00000000     0.00000000    -0.29277002
+       7      -0.28867513     0.00000000    -0.10910895     0.00000000     0.00000000
+       9       0.00000000     0.00000000     0.65465367     0.00000000     0.00000000
+      11       0.00000000     0.00000000     0.00000000     0.00000000     0.03659625
+      12       0.00000000    -0.20412415     0.00000000    -0.23145502     0.00000000
+      13       0.00000000     0.00000000     0.00000000     0.00000000    -0.29277002
+      14       0.00000000     0.00000000     0.00000000     0.30860670     0.00000000
+      15       0.00000000     0.00000000     0.00000000     0.00000000     0.09759001
+
+               Column   6     Column   7     Column   8     Column   9
+       1       0.00000000    -0.05455447     0.00000000     0.07216878
+       3      -0.23145502     0.00000000     0.20412415     0.00000000
+       4       0.00000000     0.00000000     0.00000000    -0.43301270
+       6       0.00000000     0.32732684     0.00000000     0.00000000
+       8      -0.23145502     0.00000000    -0.61237244     0.00000000
+      10       0.30860670     0.00000000     0.00000000     0.00000000
+      11       0.00000000     0.05455447     0.00000000     0.07216878
+      13       0.00000000    -0.32732684     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+
+                            **************************
+                            *** Output from SPHCOM ***
+                            **************************
+
+      LVAL      5
+      NLM      11
+      NXYZ     21
+      MINTEG    2
+
+
+                              +---------------------+
+                              ! Legendre polynomial !
+                              +---------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     1.87500000     0.00000000    -8.75000000     0.00000000
+
+               Column   6
+       1       7.87500000
+    ==== End of matrix output ====
+
+
+                            +-------------------------+
+                            ! Cosine and sine factors !
+                            +-------------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       1.00000000     0.00000000     0.00000000     0.00000000     0.00000000
+       2       1.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       3       1.00000000     2.00000000    -1.00000000     0.00000000     0.00000000
+       4       1.00000000     3.00000000    -3.00000000    -1.00000000     0.00000000
+       5       1.00000000     4.00000000    -6.00000000    -4.00000000     1.00000000
+       6       1.00000000     5.00000000   -10.00000000   -10.00000000     5.00000000
+
+               Column   6
+       6       1.00000000
+    ==== End of matrix output ====
+
+
+                  +----------------------------------------------+
+                  ! Cartesian to spherical transformation matrix !
+                  +----------------------------------------------+
+
+                              Moment order: 5
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       2       0.11410887     0.00000000    -0.05103104     0.00000000     0.01574852
+       5       0.00000000     0.28867513     0.00000000    -0.16666667     0.00000000
+       7      -0.22821773     0.00000000    -0.03402069     0.00000000     0.03149704
+       9       0.00000000     0.00000000     0.40824829     0.00000000    -0.18898224
+      12       0.00000000    -0.28867513     0.00000000    -0.16666667     0.00000000
+      14       0.00000000     0.00000000     0.00000000     0.33333333     0.00000000
+      16       0.02282177     0.00000000     0.01701035     0.00000000     0.01574852
+      18       0.00000000     0.00000000    -0.13608276     0.00000000    -0.18898224
+      20       0.00000000     0.00000000     0.00000000     0.00000000     0.12598816
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000     0.01574852     0.00000000    -0.01701035     0.00000000
+       3       0.06099375     0.00000000    -0.08333333     0.00000000     0.07216878
+       4       0.00000000     0.03149704     0.00000000     0.03402069     0.00000000
+       6       0.00000000    -0.18898224     0.00000000     0.13608276     0.00000000
+       8       0.12198751     0.00000000     0.00000000     0.00000000    -0.43301270
+      10      -0.16265001     0.00000000     0.16666667     0.00000000     0.00000000
+      11       0.00000000     0.01574852     0.00000000     0.05103104     0.00000000
+      13       0.00000000    -0.18898224     0.00000000    -0.40824829     0.00000000
+      15       0.00000000     0.12598816     0.00000000     0.00000000     0.00000000
+      17       0.06099375     0.00000000     0.08333333     0.00000000     0.07216878
+      19      -0.16265001     0.00000000    -0.16666667     0.00000000     0.00000000
+      21       0.03253000     0.00000000     0.00000000     0.00000000     0.00000000
+
+               Column  11
+       1       0.02282177
+       4      -0.22821773
+      11       0.11410887
+    ==== End of matrix output ====
+
+
+                            **************************
+                            *** Output from SPHCOM ***
+                            **************************
+
+      LVAL      6
+      NLM      13
+      NXYZ     28
+      MINTEG    2
+
+
+                              +---------------------+
+                              ! Legendre polynomial !
+                              +---------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1      -0.31250000     0.00000000     6.56250000     0.00000000   -19.68750000
+
+               Column   6     Column   7
+       1       0.00000000    14.43750000
+    ==== End of matrix output ====
+
+
+                            +-------------------------+
+                            ! Cosine and sine factors !
+                            +-------------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       1.00000000     0.00000000     0.00000000     0.00000000     0.00000000
+       2       1.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       3       1.00000000     2.00000000    -1.00000000     0.00000000     0.00000000
+       4       1.00000000     3.00000000    -3.00000000    -1.00000000     0.00000000
+       5       1.00000000     4.00000000    -6.00000000    -4.00000000     1.00000000
+       6       1.00000000     5.00000000   -10.00000000   -10.00000000     5.00000000
+       7       1.00000000     6.00000000   -15.00000000   -20.00000000    15.00000000
+
+               Column   6     Column   7
+       6       1.00000000     0.00000000
+       7       6.00000000    -1.00000000
+    ==== End of matrix output ====
+
+
+                  +----------------------------------------------+
+                  ! Cartesian to spherical transformation matrix !
+                  +----------------------------------------------+
+
+                              Moment order: 6
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       2       0.03952847     0.00000000    -0.01946247     0.00000000     0.00888336
+       5       0.00000000     0.11410887     0.00000000    -0.07995027     0.00000000
+       7      -0.13176157     0.00000000     0.00000000     0.00000000     0.01776673
+       9       0.00000000     0.00000000     0.19462474     0.00000000    -0.14213381
+      12       0.00000000    -0.22821773     0.00000000    -0.05330018     0.00000000
+      14       0.00000000     0.00000000     0.00000000     0.21320072     0.00000000
+      16       0.03952847     0.00000000     0.01946247     0.00000000     0.00888336
+      18       0.00000000     0.00000000    -0.19462474     0.00000000    -0.14213381
+      20       0.00000000     0.00000000     0.00000000     0.00000000     0.14213381
+      23       0.00000000     0.02282177     0.00000000     0.02665009     0.00000000
+      25       0.00000000     0.00000000     0.00000000    -0.07106691     0.00000000
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000    -0.00306505     0.00000000     0.00444168     0.00000000
+       3       0.00000000     0.00000000     0.02809166     0.00000000    -0.02665009
+       4       0.00000000    -0.00919515     0.00000000     0.00444168     0.00000000
+       5       0.02809166     0.00000000     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.05517093     0.00000000    -0.07106691     0.00000000
+       8       0.00000000     0.00000000     0.05618332     0.00000000     0.05330018
+      10       0.00000000     0.00000000    -0.11236664     0.00000000     0.07106691
+      11       0.00000000    -0.00919515     0.00000000    -0.00444168     0.00000000
+      12       0.05618332     0.00000000     0.00000000     0.00000000     0.00000000
+      13       0.00000000     0.11034185     0.00000000     0.00000000     0.00000000
+      14      -0.11236664     0.00000000     0.00000000     0.00000000     0.00000000
+      15       0.00000000    -0.07356124     0.00000000     0.07106691     0.00000000
+      17       0.00000000     0.00000000     0.02809166     0.00000000     0.07995027
+      19       0.00000000     0.00000000    -0.11236664     0.00000000    -0.21320072
+      21       0.00000000     0.00000000     0.04494666     0.00000000     0.00000000
+      22       0.00000000    -0.00306505     0.00000000    -0.00444168     0.00000000
+      23       0.02809166     0.00000000     0.00000000     0.00000000     0.00000000
+      24       0.00000000     0.05517093     0.00000000     0.07106691     0.00000000
+      25      -0.11236664     0.00000000     0.00000000     0.00000000     0.00000000
+      26       0.00000000    -0.07356124     0.00000000    -0.07106691     0.00000000
+      27       0.04494666     0.00000000     0.00000000     0.00000000     0.00000000
+      28       0.00000000     0.00980816     0.00000000     0.00000000     0.00000000
+
+               Column  11     Column  12     Column  13
+       1      -0.00486562     0.00000000     0.00658808
+       3       0.00000000     0.02282177     0.00000000
+       4       0.02432809     0.00000000    -0.09882118
+       6       0.04865618     0.00000000     0.00000000
+       8       0.00000000    -0.22821773     0.00000000
+      11       0.02432809     0.00000000     0.09882118
+      13      -0.29193710     0.00000000     0.00000000
+      17       0.00000000     0.11410887     0.00000000
+      22      -0.00486562     0.00000000    -0.00658808
+      24       0.04865618     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+
+                            **************************
+                            *** Output from SPHCOM ***
+                            **************************
+
+      LVAL      7
+      NLM      15
+      NXYZ     36
+      MINTEG    2
+
+
+                              +---------------------+
+                              ! Legendre polynomial !
+                              +---------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000    -2.18750000     0.00000000    19.68750000     0.00000000
+
+               Column   6     Column   7     Column   8
+       1     -43.31250000     0.00000000    26.81250000
+    ==== End of matrix output ====
+
+
+                            +-------------------------+
+                            ! Cosine and sine factors !
+                            +-------------------------+
+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       1.00000000     0.00000000     0.00000000     0.00000000     0.00000000
+       2       1.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       3       1.00000000     2.00000000    -1.00000000     0.00000000     0.00000000
+       4       1.00000000     3.00000000    -3.00000000    -1.00000000     0.00000000
+       5       1.00000000     4.00000000    -6.00000000    -4.00000000     1.00000000
+       6       1.00000000     5.00000000   -10.00000000   -10.00000000     5.00000000
+       7       1.00000000     6.00000000   -15.00000000   -20.00000000    15.00000000
+       8       1.00000000     7.00000000   -21.00000000   -35.00000000    35.00000000
+
+               Column   6     Column   7     Column   8
+       6       1.00000000     0.00000000     0.00000000
+       7       6.00000000    -1.00000000     0.00000000
+       8      21.00000000    -7.00000000    -1.00000000
+    ==== End of matrix output ====
+
+
+                  +----------------------------------------------+
+                  ! Cartesian to spherical transformation matrix !
+                  +----------------------------------------------+
+
+                              Moment order: 7
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       2       0.01232517     0.00000000    -0.00646014     0.00000000     0.00350605
+       5       0.00000000     0.03952847     0.00000000    -0.03100868     0.00000000
+       7      -0.06162583     0.00000000     0.00646014     0.00000000     0.00584342
+       9       0.00000000     0.00000000     0.07752171     0.00000000    -0.07012102
+      12       0.00000000    -0.13176157     0.00000000     0.00000000     0.00000000
+      14       0.00000000     0.00000000     0.00000000     0.10336228     0.00000000
+      16       0.03697550     0.00000000     0.01162826     0.00000000     0.00116868
+      18       0.00000000     0.00000000    -0.15504342     0.00000000    -0.04674735
+      20       0.00000000     0.00000000     0.00000000     0.00000000     0.09349470
+      23       0.00000000     0.03952847     0.00000000     0.03100868     0.00000000
+      25       0.00000000     0.00000000     0.00000000    -0.10336228     0.00000000
+      29      -0.00176074     0.00000000    -0.00129203     0.00000000    -0.00116868
+      31       0.00000000     0.00000000     0.01550434     0.00000000     0.02337367
+      33       0.00000000     0.00000000     0.00000000     0.00000000    -0.03116490
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000     0.00000000     0.00000000    -0.00112457     0.00000000
+       2       0.00000000    -0.00112457     0.00000000     0.00000000     0.00000000
+       3       0.00000000     0.00000000    -0.00595065     0.00000000     0.00826384
+       4       0.00000000     0.00000000     0.00000000    -0.00337370     0.00000000
+       5       0.01652768     0.00000000     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000     0.00000000     0.02698959     0.00000000
+       7       0.00000000    -0.00337370     0.00000000     0.00000000     0.00000000
+       8       0.00000000     0.00000000    -0.01785194     0.00000000     0.00826384
+       9       0.00000000     0.02698959     0.00000000     0.00000000     0.00000000
+      10       0.00000000     0.00000000     0.03570388     0.00000000    -0.04407382
+      11       0.00000000     0.00000000     0.00000000    -0.00337370     0.00000000
+      12       0.03305537     0.00000000     0.00000000     0.00000000     0.00000000
+      13       0.00000000     0.00000000     0.00000000     0.05397919     0.00000000
+      14      -0.08814765     0.00000000     0.00000000     0.00000000     0.00000000
+      15       0.00000000     0.00000000     0.00000000    -0.05397919     0.00000000
+      16       0.00000000    -0.00337370     0.00000000     0.00000000     0.00000000
+      17       0.00000000     0.00000000    -0.01785194     0.00000000    -0.00826384
+      18       0.00000000     0.05397919     0.00000000     0.00000000     0.00000000
+      19       0.00000000     0.00000000     0.07140776     0.00000000     0.00000000
+      20       0.00000000    -0.05397919     0.00000000     0.00000000     0.00000000
+      21       0.00000000     0.00000000    -0.02856310     0.00000000     0.02644429
+      22       0.00000000     0.00000000     0.00000000    -0.00112457     0.00000000
+      23       0.01652768     0.00000000     0.00000000     0.00000000     0.00000000
+      24       0.00000000     0.00000000     0.00000000     0.02698959     0.00000000
+      25      -0.08814765     0.00000000     0.00000000     0.00000000     0.00000000
+      26       0.00000000     0.00000000     0.00000000    -0.05397919     0.00000000
+      27       0.05288859     0.00000000     0.00000000     0.00000000     0.00000000
+      28       0.00000000     0.00000000     0.00000000     0.01439445     0.00000000
+      29       0.00000000    -0.00112457     0.00000000     0.00000000     0.00000000
+      30       0.00000000     0.00000000    -0.00595065     0.00000000    -0.00826384
+      31       0.00000000     0.02698959     0.00000000     0.00000000     0.00000000
+      32       0.00000000     0.00000000     0.03570388     0.00000000     0.04407382
+      33       0.00000000    -0.05397919     0.00000000     0.00000000     0.00000000
+      34       0.00000000     0.00000000    -0.02856310     0.00000000    -0.02644429
+      35       0.00000000     0.01439445     0.00000000     0.00000000     0.00000000
+      36       0.00000000     0.00000000     0.00272030     0.00000000     0.00000000
+
+               Column  11     Column  12     Column  13     Column  14     Column  15
+       1       0.00116868     0.00000000    -0.00129203     0.00000000     0.00176074
+       3       0.00000000    -0.00775217     0.00000000     0.00658808     0.00000000
+       4      -0.00116868     0.00000000     0.01162826     0.00000000    -0.03697550
+       6      -0.02337367     0.00000000     0.01550434     0.00000000     0.00000000
+       8       0.00000000     0.03876085     0.00000000    -0.09882118     0.00000000
+      10       0.00000000     0.02584057     0.00000000     0.00000000     0.00000000
+      11      -0.00584342     0.00000000     0.00646014     0.00000000     0.06162583
+      13       0.04674735     0.00000000    -0.15504342     0.00000000     0.00000000
+      15       0.03116490     0.00000000     0.00000000     0.00000000     0.00000000
+      17       0.00000000     0.03876085     0.00000000     0.09882118     0.00000000
+      19       0.00000000    -0.15504342     0.00000000     0.00000000     0.00000000
+      22      -0.00350605     0.00000000    -0.00646014     0.00000000    -0.01232517
+      24       0.07012102     0.00000000     0.07752171     0.00000000     0.00000000
+      26      -0.09349470     0.00000000     0.00000000     0.00000000     0.00000000
+      30       0.00000000    -0.00775217     0.00000000    -0.00658808     0.00000000
+      32       0.00000000     0.02584057     0.00000000     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+
+                        Cartesian transformation matrices
+                        ---------------------------------
+
+  to spherical harmonics
+
+
+  Coefficients for angular quantum number     0
+  to GTOs with labels:
+     1s  
+
+               Column   1
+       1       1.00000000
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     1
+  to GTOs with labels:
+     2px  2py  2pz 
+
+               Column   1     Column   2     Column   3
+       1       1.00000000     0.00000000     0.00000000
+       2       0.00000000     1.00000000     0.00000000
+       3       0.00000000     0.00000000     1.00000000
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     2
+  to GTOs with labels:
+     3d2- 3d1- 3d0  3d1+ 3d2+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     1.00000000     0.00000000     0.00000000     0.00000000
+       2       0.00000000     0.00000000     0.00000000     0.00000000     1.00000000
+       3      -0.28867513     0.00000000     0.00000000    -0.28867513     0.00000000
+       4       0.00000000     0.00000000     1.00000000     0.00000000     0.00000000
+       5       0.50000000     0.00000000     0.00000000    -0.50000000     0.00000000
+
+               Column   6
+       3       0.57735027
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     3
+  to GTOs with labels:
+     4f3- 4f2- 4f1- 4f0  4f1+ 4f2+ 4f3+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.61237244     0.00000000     0.00000000     0.00000000
+       2       0.00000000     0.00000000     0.00000000     0.00000000     1.00000000
+       3       0.00000000    -0.15811388     0.00000000     0.00000000     0.00000000
+       4       0.00000000     0.00000000    -0.38729833     0.00000000     0.00000000
+       5      -0.15811388     0.00000000     0.00000000    -0.15811388     0.00000000
+       6       0.00000000     0.00000000     0.50000000     0.00000000     0.00000000
+       7       0.20412415     0.00000000     0.00000000    -0.61237244     0.00000000
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000    -0.20412415     0.00000000     0.00000000     0.00000000
+       3       0.00000000    -0.15811388     0.00000000     0.63245553     0.00000000
+       4       0.00000000     0.00000000    -0.38729833     0.00000000     0.25819889
+       5       0.63245553     0.00000000     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000    -0.50000000     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     4
+  to GTOs with labels:
+     5g4- 5g3- 5g2- 5g1- 5g0  5g1+ 5g2+ 5g3+ 5g4+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.28867513     0.00000000     0.00000000     0.00000000
+       2       0.00000000     0.00000000     0.00000000     0.00000000     0.61237244
+       3       0.00000000    -0.10910895     0.00000000     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.00000000    -0.23145502
+       5       0.03659625     0.00000000     0.00000000     0.07319251     0.00000000
+       6       0.00000000     0.00000000    -0.23145502     0.00000000     0.00000000
+       7      -0.05455447     0.00000000     0.00000000     0.00000000     0.00000000
+       8       0.00000000     0.00000000     0.20412415     0.00000000     0.00000000
+       9       0.07216878     0.00000000     0.00000000    -0.43301270     0.00000000
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000    -0.28867513     0.00000000     0.00000000     0.00000000
+       3       0.00000000    -0.10910895     0.00000000     0.65465367     0.00000000
+       5      -0.29277002     0.00000000     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000    -0.23145502     0.00000000     0.30860670
+       7       0.32732684     0.00000000     0.00000000     0.00000000     0.00000000
+       8       0.00000000     0.00000000    -0.61237244     0.00000000     0.00000000
+
+               Column  11     Column  12     Column  13     Column  14     Column  15
+       2       0.00000000    -0.20412415     0.00000000     0.00000000     0.00000000
+       4       0.00000000    -0.23145502     0.00000000     0.30860670     0.00000000
+       5       0.03659625     0.00000000    -0.29277002     0.00000000     0.09759001
+       7       0.05455447     0.00000000    -0.32732684     0.00000000     0.00000000
+       9       0.07216878     0.00000000     0.00000000     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     5
+  to GTOs with labels:
+     6h5- 6h4- 6h3- 6h2- 6h1- 6h0  6h1+ 6h2+ 6h3+ 6h4+ 6h5+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.11410887     0.00000000     0.00000000     0.00000000
+       2       0.00000000     0.00000000     0.00000000     0.00000000     0.28867513
+       3       0.00000000    -0.05103104     0.00000000     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.00000000    -0.16666667
+       5       0.00000000     0.01574852     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000     0.06099375     0.00000000     0.00000000
+       7       0.01574852     0.00000000     0.00000000     0.03149704     0.00000000
+       8       0.00000000     0.00000000    -0.08333333     0.00000000     0.00000000
+       9      -0.01701035     0.00000000     0.00000000     0.03402069     0.00000000
+      10       0.00000000     0.00000000     0.07216878     0.00000000     0.00000000
+      11       0.02282177     0.00000000     0.00000000    -0.22821773     0.00000000
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000    -0.22821773     0.00000000     0.00000000     0.00000000
+       3       0.00000000    -0.03402069     0.00000000     0.40824829     0.00000000
+       5       0.00000000     0.03149704     0.00000000    -0.18898224     0.00000000
+       6       0.00000000     0.00000000     0.12198751     0.00000000    -0.16265001
+       7      -0.18898224     0.00000000     0.00000000     0.00000000     0.00000000
+       8       0.00000000     0.00000000     0.00000000     0.00000000     0.16666667
+       9       0.13608276     0.00000000     0.00000000     0.00000000     0.00000000
+      10       0.00000000     0.00000000    -0.43301270     0.00000000     0.00000000
+
+               Column  11     Column  12     Column  13     Column  14     Column  15
+       2       0.00000000    -0.28867513     0.00000000     0.00000000     0.00000000
+       4       0.00000000    -0.16666667     0.00000000     0.33333333     0.00000000
+       7       0.01574852     0.00000000    -0.18898224     0.00000000     0.12598816
+       9       0.05103104     0.00000000    -0.40824829     0.00000000     0.00000000
+      11       0.11410887     0.00000000     0.00000000     0.00000000     0.00000000
+
+               Column  16     Column  17     Column  18     Column  19     Column  20
+       1       0.02282177     0.00000000     0.00000000     0.00000000     0.00000000
+       3       0.01701035     0.00000000    -0.13608276     0.00000000     0.00000000
+       5       0.01574852     0.00000000    -0.18898224     0.00000000     0.12598816
+       6       0.00000000     0.06099375     0.00000000    -0.16265001     0.00000000
+       8       0.00000000     0.08333333     0.00000000    -0.16666667     0.00000000
+      10       0.00000000     0.07216878     0.00000000     0.00000000     0.00000000
+
+               Column  21
+       6       0.03253000
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     6
+  to GTOs with labels:
+     7i6- 7i5- 7i4- 7i3- 7i2- 7i1- 7i0  7i1+ 7i2+ 7i3+ 7i4+ 7i5+ 7i6+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.03952847     0.00000000     0.00000000     0.00000000
+       2       0.00000000     0.00000000     0.00000000     0.00000000     0.11410887
+       3       0.00000000    -0.01946247     0.00000000     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.00000000    -0.07995027
+       5       0.00000000     0.00888336     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000     0.00000000     0.00000000     0.02809166
+       7      -0.00306505     0.00000000     0.00000000    -0.00919515     0.00000000
+       8       0.00000000     0.00000000     0.02809166     0.00000000     0.00000000
+       9       0.00444168     0.00000000     0.00000000     0.00444168     0.00000000
+      10       0.00000000     0.00000000    -0.02665009     0.00000000     0.00000000
+      11      -0.00486562     0.00000000     0.00000000     0.02432809     0.00000000
+      12       0.00000000     0.00000000     0.02282177     0.00000000     0.00000000
+      13       0.00658808     0.00000000     0.00000000    -0.09882118     0.00000000
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000    -0.13176157     0.00000000     0.00000000     0.00000000
+       3       0.00000000     0.00000000     0.00000000     0.19462474     0.00000000
+       5       0.00000000     0.01776673     0.00000000    -0.14213381     0.00000000
+       7       0.05517093     0.00000000     0.00000000     0.00000000     0.00000000
+       8       0.00000000     0.00000000     0.05618332     0.00000000    -0.11236664
+       9      -0.07106691     0.00000000     0.00000000     0.00000000     0.00000000
+      10       0.00000000     0.00000000     0.05330018     0.00000000     0.07106691
+      11       0.04865618     0.00000000     0.00000000     0.00000000     0.00000000
+      12       0.00000000     0.00000000    -0.22821773     0.00000000     0.00000000
+
+               Column  11     Column  12     Column  13     Column  14     Column  15
+       2       0.00000000    -0.22821773     0.00000000     0.00000000     0.00000000
+       4       0.00000000    -0.05330018     0.00000000     0.21320072     0.00000000
+       6       0.00000000     0.05618332     0.00000000    -0.11236664     0.00000000
+       7      -0.00919515     0.00000000     0.11034185     0.00000000    -0.07356124
+       9      -0.00444168     0.00000000     0.00000000     0.00000000     0.07106691
+      11       0.02432809     0.00000000    -0.29193710     0.00000000     0.00000000
+      13       0.09882118     0.00000000     0.00000000     0.00000000     0.00000000
+
+               Column  16     Column  17     Column  18     Column  19     Column  20
+       1       0.03952847     0.00000000     0.00000000     0.00000000     0.00000000
+       3       0.01946247     0.00000000    -0.19462474     0.00000000     0.00000000
+       5       0.00888336     0.00000000    -0.14213381     0.00000000     0.14213381
+       8       0.00000000     0.02809166     0.00000000    -0.11236664     0.00000000
+      10       0.00000000     0.07995027     0.00000000    -0.21320072     0.00000000
+      12       0.00000000     0.11410887     0.00000000     0.00000000     0.00000000
+
+               Column  21     Column  22     Column  23     Column  24     Column  25
+       2       0.00000000     0.00000000     0.02282177     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.02665009     0.00000000    -0.07106691
+       6       0.00000000     0.00000000     0.02809166     0.00000000    -0.11236664
+       7       0.00000000    -0.00306505     0.00000000     0.05517093     0.00000000
+       8       0.04494666     0.00000000     0.00000000     0.00000000     0.00000000
+       9       0.00000000    -0.00444168     0.00000000     0.07106691     0.00000000
+      11       0.00000000    -0.00486562     0.00000000     0.04865618     0.00000000
+      13       0.00000000    -0.00658808     0.00000000     0.00000000     0.00000000
+
+               Column  26     Column  27     Column  28
+       6       0.00000000     0.04494666     0.00000000
+       7      -0.07356124     0.00000000     0.00980816
+       9      -0.07106691     0.00000000     0.00000000
+    ==== End of matrix output ====
+
+  Coefficients for angular quantum number     7
+  to GTOs with labels:
+     8k7- 8k6- 8k5- 8k4- 8k3- 8k2- 8k1- 8k0  8k1+ 8k2+ 8k3+ 8k4+ 8k5+ 8k6+ 8k7+
+
+               Column   1     Column   2     Column   3     Column   4     Column   5
+       1       0.00000000     0.01232517     0.00000000     0.00000000     0.00000000
+       2       0.00000000     0.00000000     0.00000000     0.00000000     0.03952847
+       3       0.00000000    -0.00646014     0.00000000     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.00000000    -0.03100868
+       5       0.00000000     0.00350605     0.00000000     0.00000000     0.00000000
+       6       0.00000000     0.00000000     0.00000000     0.00000000     0.01652768
+       7       0.00000000    -0.00112457     0.00000000     0.00000000     0.00000000
+       8       0.00000000     0.00000000    -0.00595065     0.00000000     0.00000000
+       9      -0.00112457     0.00000000     0.00000000    -0.00337370     0.00000000
+      10       0.00000000     0.00000000     0.00826384     0.00000000     0.00000000
+      11       0.00116868     0.00000000     0.00000000    -0.00116868     0.00000000
+      12       0.00000000     0.00000000    -0.00775217     0.00000000     0.00000000
+      13      -0.00129203     0.00000000     0.00000000     0.01162826     0.00000000
+      14       0.00000000     0.00000000     0.00658808     0.00000000     0.00000000
+      15       0.00176074     0.00000000     0.00000000    -0.03697550     0.00000000
+
+               Column   6     Column   7     Column   8     Column   9     Column  10
+       1       0.00000000    -0.06162583     0.00000000     0.00000000     0.00000000
+       3       0.00000000     0.00646014     0.00000000     0.07752171     0.00000000
+       5       0.00000000     0.00584342     0.00000000    -0.07012102     0.00000000
+       7       0.00000000    -0.00337370     0.00000000     0.02698959     0.00000000
+       8       0.00000000     0.00000000    -0.01785194     0.00000000     0.03570388
+       9       0.02698959     0.00000000     0.00000000     0.00000000     0.00000000
+      10       0.00000000     0.00000000     0.00826384     0.00000000    -0.04407382
+      11      -0.02337367     0.00000000     0.00000000     0.00000000     0.00000000
+      12       0.00000000     0.00000000     0.03876085     0.00000000     0.02584057
+      13       0.01550434     0.00000000     0.00000000     0.00000000     0.00000000
+      14       0.00000000     0.00000000    -0.09882118     0.00000000     0.00000000
+
+               Column  11     Column  12     Column  13     Column  14     Column  15
+       2       0.00000000    -0.13176157     0.00000000     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.00000000     0.10336228     0.00000000
+       6       0.00000000     0.03305537     0.00000000    -0.08814765     0.00000000
+       9      -0.00337370     0.00000000     0.05397919     0.00000000    -0.05397919
+      11      -0.00584342     0.00000000     0.04674735     0.00000000     0.03116490
+      13       0.00646014     0.00000000    -0.15504342     0.00000000     0.00000000
+      15       0.06162583     0.00000000     0.00000000     0.00000000     0.00000000
+
+               Column  16     Column  17     Column  18     Column  19     Column  20
+       1       0.03697550     0.00000000     0.00000000     0.00000000     0.00000000
+       3       0.01162826     0.00000000    -0.15504342     0.00000000     0.00000000
+       5       0.00116868     0.00000000    -0.04674735     0.00000000     0.09349470
+       7      -0.00337370     0.00000000     0.05397919     0.00000000    -0.05397919
+       8       0.00000000    -0.01785194     0.00000000     0.07140776     0.00000000
+      10       0.00000000    -0.00826384     0.00000000     0.00000000     0.00000000
+      12       0.00000000     0.03876085     0.00000000    -0.15504342     0.00000000
+      14       0.00000000     0.09882118     0.00000000     0.00000000     0.00000000
+
+               Column  21     Column  22     Column  23     Column  24     Column  25
+       2       0.00000000     0.00000000     0.03952847     0.00000000     0.00000000
+       4       0.00000000     0.00000000     0.03100868     0.00000000    -0.10336228
+       6       0.00000000     0.00000000     0.01652768     0.00000000    -0.08814765
+       8      -0.02856310     0.00000000     0.00000000     0.00000000     0.00000000
+       9       0.00000000    -0.00112457     0.00000000     0.02698959     0.00000000
+      10       0.02644429     0.00000000     0.00000000     0.00000000     0.00000000
+      11       0.00000000    -0.00350605     0.00000000     0.07012102     0.00000000
+      13       0.00000000    -0.00646014     0.00000000     0.07752171     0.00000000
+      15       0.00000000    -0.01232517     0.00000000     0.00000000     0.00000000
+
+               Column  26     Column  27     Column  28     Column  29     Column  30
+       1       0.00000000     0.00000000     0.00000000    -0.00176074     0.00000000
+       3       0.00000000     0.00000000     0.00000000    -0.00129203     0.00000000
+       5       0.00000000     0.00000000     0.00000000    -0.00116868     0.00000000
+       6       0.00000000     0.05288859     0.00000000     0.00000000     0.00000000
+       7       0.00000000     0.00000000     0.00000000    -0.00112457     0.00000000
+       8       0.00000000     0.00000000     0.00000000     0.00000000    -0.00595065
+       9      -0.05397919     0.00000000     0.01439445     0.00000000     0.00000000
+      10       0.00000000     0.00000000     0.00000000     0.00000000    -0.00826384
+      11      -0.09349470     0.00000000     0.00000000     0.00000000     0.00000000
+      12       0.00000000     0.00000000     0.00000000     0.00000000    -0.00775217
+      14       0.00000000     0.00000000     0.00000000     0.00000000    -0.00658808
+
+               Column  31     Column  32     Column  33     Column  34     Column  35
+       3       0.01550434     0.00000000     0.00000000     0.00000000     0.00000000
+       5       0.02337367     0.00000000    -0.03116490     0.00000000     0.00000000
+       7       0.02698959     0.00000000    -0.05397919     0.00000000     0.01439445
+       8       0.00000000     0.03570388     0.00000000    -0.02856310     0.00000000
+      10       0.00000000     0.04407382     0.00000000    -0.02644429     0.00000000
+      12       0.00000000     0.02584057     0.00000000     0.00000000     0.00000000
+
+               Column  36
+       8       0.00272030
+    ==== End of matrix output ====
+
+  Atomic type no.    1
+  --------------------
+  Nuclear charge:  26.00000
+  Number of symmetry independent centers:    1
+   Symmetry independent centers:
+      Fe     0.000920000000000   0.000000000000000   0.377890000000000
+  Number of basis sets to read;    2
+  The basis set is "cc-pVDZ-DK_ogc" from the basis set library.
+ BASLIB: Q, QEFF, INTQ   26.000000000000000        26.000000000000000               26
+ BASLIB: BASNAM cc-pVDZ-DK_ogc                                                                  
+
+
+                                Output from BASLIB
+                                ------------------
+
+ ISTART =          16
+ BASTMP = cc-pVDZ-DK_ogc                                                                  
+ IPOLST =           0
+ POLFUN = F
+ ANO    = F
+ SADLEJ = F
+ NQVD   = F
+  Basis set file used for this atomic type with Z =  26 :
+  Trying file: "/work/sdujk/kjellgren/test/cc-pVDZ-DK_ogc"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG        20         6         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:          20           6           1
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           1   4316265.0000000000     
+ READ_NU read - CPRIMU:   1.3999999999999999E-004  -7.2000000000000002E-005   1.7000000000000000E-005  -3.9999999999999998E-006  -6.9999999999999999E-006   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           1   646342.40000000002     
+ READ_NU read - CPRIMU:   4.0499999999999998E-004  -2.0900000000000001E-004   4.8999999999999998E-005  -1.1000000000000000E-005  -2.0999999999999999E-005   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           1   147089.70000000001     
+ READ_NU read - CPRIMU:   1.1190000000000000E-003  -5.7899999999999998E-004   1.3500000000000000E-004  -2.9000000000000000E-005  -5.8000000000000000E-005   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           1   41661.519999999997     
+ READ_NU read - CPRIMU:   2.9069999999999999E-003  -1.5060000000000000E-003   3.5199999999999999E-004  -7.7000000000000001E-005  -1.5500000000000000E-004   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           1   13590.770000000000     
+ READ_NU read - CPRIMU:   7.5709999999999996E-003  -3.9389999999999998E-003   9.2299999999999999E-004  -2.0100000000000001E-004  -3.9300000000000001E-004   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           1   4905.7500000000000     
+ READ_NU read - CPRIMU:   1.9817999999999999E-002  -1.0396000000000001E-002   2.4520000000000002E-003  -5.3499999999999999E-004  -1.1010000000000000E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           1   1912.7460000000001     
+ READ_NU read - CPRIMU:   5.0734000000000001E-002  -2.7074000000000001E-002   6.4510000000000001E-003  -1.4080000000000000E-003  -2.6930000000000001E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           1   792.60429999999997     
+ READ_NU read - CPRIMU:  0.11872900000000000       -6.5777000000000002E-002   1.6105999999999999E-002  -3.5179999999999999E-003  -7.4040000000000000E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           1   344.80650000000003     
+ READ_NU read - CPRIMU:  0.23116400000000001      -0.13908200000000001        3.5742000000000003E-002  -7.8139999999999998E-003  -1.4484000000000000E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          10           1   155.89990000000000     
+ READ_NU read - CPRIMU:  0.31932199999999999      -0.23014999999999999        6.5528000000000003E-002  -1.4371999999999999E-002  -3.1852999999999999E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          11           1   72.230909999999994     
+ READ_NU read - CPRIMU:  0.23364799999999999      -0.22966300000000001        7.4429999999999996E-002  -1.6383000000000002E-002  -2.5352000000000000E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          12           1   32.725059999999999     
+ READ_NU read - CPRIMU:   7.4022000000000004E-002   4.6091000000000000E-002  -2.5711000000000001E-002   5.6429999999999996E-003  -7.8869999999999999E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          13           1   15.667619999999999     
+ READ_NU read - CPRIMU:   9.0952000000000005E-002  0.51505100000000004      -0.30864500000000000        7.1221000000000007E-002  0.19147000000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          14           1   7.5034830000000001     
+ READ_NU read - CPRIMU:   8.8898000000000005E-002  0.48717500000000002      -0.44654400000000000       0.10780000000000001       0.14824200000000001        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          15           1   3.3122229999999999     
+ READ_NU read - CPRIMU:   1.4302000000000000E-002   8.4379999999999997E-002  0.14898500000000001       -4.4262000000000003E-002   5.0761000000000001E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          16           1   1.5584709999999999     
+ READ_NU read - CPRIMU:  -3.8699999999999997E-004  -5.9109999999999996E-003  0.72039500000000001      -0.22599900000000001       -1.0122460000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          17           1  0.68391400000000002     
+ READ_NU read - CPRIMU:   7.9999999999999996E-006  -4.3999999999999999E-005  0.38969799999999999      -0.23762800000000001       0.34233900000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          18           1  0.14675700000000000     
+ READ_NU read - CPRIMU:  -2.5000000000000001E-005  -4.8700000000000002E-004   1.9184000000000000E-002  0.29777999999999999        1.8572660000000001        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          19           1   7.0583000000000007E-002
+ READ_NU read - CPRIMU:   3.1999999999999999E-005   4.3700000000000000E-004  -7.0229999999999997E-003  0.56549700000000003       -1.0636790000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          20           1   3.1448999999999998E-002
+ READ_NU read - CPRIMU:   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           1          20
+   4316265.0000000000        646342.40000000002        147089.70000000001        41661.519999999997        13590.770000000000        4905.7500000000000        1912.7460000000001        792.60429999999997        344.80650000000003        155.89990000000000        72.230909999999994        32.725059999999999        15.667619999999999        7.5034830000000001        3.3122229999999999        1.5584709999999999       0.68391400000000002       0.14675700000000000        7.0583000000000007E-002   3.1448999999999998E-002
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG        16         5         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:          16           5           2
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           2   17745.689999999999     
+ READ_NU read - CPRIMU:   1.2300000000000001E-004  -4.3000000000000002E-005   9.0000000000000002E-006   1.4000000000000000E-005   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           2   4200.7209999999995     
+ READ_NU read - CPRIMU:   5.6599999999999999E-004  -2.0000000000000001E-004   4.3999999999999999E-005   6.6000000000000005E-005   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           2   1364.4290000000001     
+ READ_NU read - CPRIMU:   2.6080000000000001E-003  -9.2299999999999999E-004   2.0100000000000001E-004   3.0299999999999999E-004   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           2   522.08060000000000     
+ READ_NU read - CPRIMU:   1.0295000000000000E-002  -3.6679999999999998E-003   8.0000000000000004E-004   1.2190000000000000E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           2   221.45949999999999     
+ READ_NU read - CPRIMU:   3.4750999999999997E-002  -1.2539000000000000E-002   2.7380000000000000E-003   4.1200000000000004E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           2   100.90960000000000     
+ READ_NU read - CPRIMU:   9.6689999999999998E-002  -3.5847999999999998E-002   7.8480000000000008E-003   1.1953000000000000E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           2   48.401150000000001     
+ READ_NU read - CPRIMU:  0.21002999999999999       -8.0822000000000005E-002   1.7739000000000001E-002   2.6620000000000001E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           2   23.985360000000000     
+ READ_NU read - CPRIMU:  0.33245700000000000      -0.13469700000000001        2.9749000000000001E-002   4.5698999999999997E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           2   12.182499999999999     
+ READ_NU read - CPRIMU:  0.33077099999999998      -0.13691200000000001        3.0388999999999999E-002   4.5032999999999997E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          10           2   6.2422979999999999     
+ READ_NU read - CPRIMU:  0.15473300000000001        3.3713000000000000E-002  -1.0765000000000000E-002  -1.3011000000000000E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          11           2   3.1109439999999999     
+ READ_NU read - CPRIMU:   2.0964000000000000E-002  0.33567000000000002       -8.7689000000000003E-002 -0.14137500000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          12           2   1.5099579999999999     
+ READ_NU read - CPRIMU:  -2.3460000000000000E-003  0.45549600000000001      -0.12847000000000000      -0.19414799999999999        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          13           2  0.71084499999999995     
+ READ_NU read - CPRIMU:  -1.8540000000000000E-003  0.28176000000000001       -7.3996000000000006E-002 -0.10177000000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          14           2  0.27259800000000001     
+ READ_NU read - CPRIMU:  -3.1700000000000001E-004   4.5150000000000003E-002  0.21545500000000001       0.46786400000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          15           2  0.10397199999999999     
+ READ_NU read - CPRIMU:   3.0000000000000001E-005  -3.1649999999999998E-003  0.57200499999999999       0.62421800000000005        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          16           2   3.8165999999999999E-002
+ READ_NU read - CPRIMU:   0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           2          16
+   17745.689999999999        4200.7209999999995        1364.4290000000001        522.08060000000000        221.45949999999999        100.90960000000000        48.401150000000001        23.985360000000000        12.182499999999999        6.2422979999999999        3.1109439999999999        1.5099579999999999       0.71084499999999995       0.27259800000000001       0.10397199999999999        3.8165999999999999E-002
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         8         3         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           8           3           3
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           3   114.88400000000000     
+ READ_NU read - CPRIMU:   3.5320000000000000E-003  -3.8960000000000002E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           3   33.887799999999999     
+ READ_NU read - CPRIMU:   2.5550000000000000E-002  -2.8206999999999999E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           3   12.372999999999999     
+ READ_NU read - CPRIMU:   9.8357000000000000E-002 -0.11157300000000001        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           3   4.9992500000000000     
+ READ_NU read - CPRIMU:  0.23791899999999999      -0.27283900000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           3   2.0704300000000000     
+ READ_NU read - CPRIMU:  0.35653899999999999      -0.31715199999999999        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           3  0.82818300000000000     
+ READ_NU read - CPRIMU:  0.36284800000000000        5.2061999999999997E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           3  0.30754700000000001     
+ READ_NU read - CPRIMU:  0.23880299999999999       0.56126900000000002        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           3   9.9455000000000002E-002
+ READ_NU read - CPRIMU:   0.0000000000000000        0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           3           8
+   114.88400000000000        33.887799999999999        12.372999999999999        4.9992500000000000        2.0704300000000000       0.82818300000000000       0.30754700000000001        9.9455000000000002E-002
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         2         1         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           2           1           4
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           4   3.2242999999999999     
+ READ_NU read - CPRIMU:  0.42224899999999999     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           4  0.77580000000000005     
+ READ_NU read - CPRIMU:  0.77146800000000004     
+ READ_NU...NBLOCK,INTEXP=           4           2
+   3.2242999999999999       0.77580000000000005     
+
+  Output from FIND_POS: New element
+
+  Info about the basis set file: your basis has no documentation.
+  Basis set: cc-pVDZ-DK_ogc                                                                  
+  Basis set:
+      Max.ang.quantum no.:    3  Blocks:    1    1    1    1
+ BASLIB: Q, QEFF, INTQ   26.000000000000000        26.000000000000000               26
+ BASLIB: BASNAM HUCKEL                                                                          
+  Basis set file used for this atomic type with Z =  26 :
+  Trying file: "/work/sdujk/kjellgren/test/ano-4"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+  Basis set:
+      Max.ang.quantum no.:    2  Blocks:    1    1    1
+
+  Atomic type no.    2
+  --------------------
+  Nuclear charge:   7.00000
+  Number of symmetry independent centers:    1
+   Symmetry independent centers:
+      N      0.000620000000000   0.000000000000000   3.515450000000000
+  Number of basis sets to read;    2
+  The basis set is "cc-pVDZ-DK_ogc" from the basis set library.
+ BASLIB: Q, QEFF, INTQ   7.0000000000000000        7.0000000000000000                7
+ BASLIB: BASNAM cc-pVDZ-DK_ogc                                                                  
+
+
+                                Output from BASLIB
+                                ------------------
+
+ ISTART =          16
+ BASTMP = cc-pVDZ-DK_ogc                                                                  
+ IPOLST =           0
+ POLFUN = F
+ ANO    = F
+ SADLEJ = F
+ NQVD   = F
+  Basis set file used for this atomic type with Z =   7 :
+  Trying file: "/work/sdujk/kjellgren/test/cc-pVDZ-DK_ogc"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         9         3         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           9           3           1
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           1   9046.0000000000000     
+ READ_NU read - CPRIMU:   9.1060000000000002E-004  -1.9950000000000000E-004   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           1   1357.0000000000000     
+ READ_NU read - CPRIMU:   5.6443999999999999E-003  -1.2669000000000001E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           1   309.30000000000001     
+ READ_NU read - CPRIMU:   2.7807200000000001E-002  -6.0905999999999998E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           1   87.730000000000004     
+ READ_NU read - CPRIMU:  0.10368049999999999       -2.4697000000000000E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           1   28.559999999999999     
+ READ_NU read - CPRIMU:  0.27901419999999999       -6.7602800000000005E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           1   10.210000000000001     
+ READ_NU read - CPRIMU:  0.44822160000000000      -0.15823350000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           1   3.8380000000000001     
+ READ_NU read - CPRIMU:  0.27773730000000002      -0.12120599999999999        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           1  0.74660000000000004     
+ READ_NU read - CPRIMU:   1.5399299999999999E-002  0.54988709999999996        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           1  0.22480000000000000     
+ READ_NU read - CPRIMU:   0.0000000000000000        0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           1           9
+   9046.0000000000000        1357.0000000000000        309.30000000000001        87.730000000000004        28.559999999999999        10.210000000000001        3.8380000000000001       0.74660000000000004       0.22480000000000000     
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         4         2         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           4           2           2
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           2   13.550000000000001     
+ READ_NU read - CPRIMU:   4.0010299999999999E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           2   2.9169999999999998     
+ READ_NU read - CPRIMU:  0.21721320000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           2  0.79730000000000001     
+ READ_NU read - CPRIMU:  0.51019070000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           2  0.21850000000000000     
+ READ_NU read - CPRIMU:   0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           2           4
+   13.550000000000001        2.9169999999999998       0.79730000000000001       0.21850000000000000     
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         1         1         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           1           1           3
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           3  0.81699999999999995     
+ READ_NU read - CPRIMU:   1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           3           1
+  0.81699999999999995     
+
+  Output from FIND_POS: New element
+
+  Info about the basis set file: your basis has no documentation.
+  Basis set: cc-pVDZ-DK_ogc                                                                  
+  Basis set:
+      Max.ang.quantum no.:    2  Blocks:    1    1    1
+ BASLIB: Q, QEFF, INTQ   7.0000000000000000        7.0000000000000000                7
+ BASLIB: BASNAM HUCKEL                                                                          
+  Basis set file used for this atomic type with Z =   7 :
+  Trying file: "/work/sdujk/kjellgren/test/ano-4"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+  Basis set:
+      Max.ang.quantum no.:    1  Blocks:    1    1
+
+  Atomic type no.    3
+  --------------------
+  Nuclear charge:   6.00000
+  Number of symmetry independent centers:    3
+   Symmetry independent centers:
+      C      2.998550000000000   0.000000000000000  -1.129060000000000
+      C     -1.499000000000000  -2.595200000000000  -1.129280000000000
+      C     -1.499000000000000   2.595200000000000  -1.129280000000000
+  Number of basis sets to read;    2
+  The basis set is "cc-pVDZ-DK_ogc" from the basis set library.
+ BASLIB: Q, QEFF, INTQ   6.0000000000000000        6.0000000000000000                6
+ BASLIB: BASNAM cc-pVDZ-DK_ogc                                                                  
+
+
+                                Output from BASLIB
+                                ------------------
+
+ ISTART =          16
+ BASTMP = cc-pVDZ-DK_ogc                                                                  
+ IPOLST =           0
+ POLFUN = F
+ ANO    = F
+ SADLEJ = F
+ NQVD   = F
+  Basis set file used for this atomic type with Z =   6 :
+  Trying file: "/work/sdujk/kjellgren/test/cc-pVDZ-DK_ogc"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         9         3         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           9           3           1
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           1   6665.0000000000000     
+ READ_NU read - CPRIMU:   8.5170000000000005E-004  -1.8029999999999999E-004   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           1   1000.0000000000000     
+ READ_NU read - CPRIMU:   5.5120999999999998E-003  -1.1949000000000000E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           1   228.00000000000000     
+ READ_NU read - CPRIMU:   2.7369000000000001E-002  -5.7942999999999996E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           1   64.709999999999994     
+ READ_NU read - CPRIMU:  0.10205680000000000       -2.3416599999999999E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           1   21.059999999999999     
+ READ_NU read - CPRIMU:  0.27494790000000002       -6.4049999999999996E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           1   7.4950000000000001     
+ READ_NU read - CPRIMU:  0.44834089999999999      -0.15009190000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           1   2.7970000000000002     
+ READ_NU read - CPRIMU:  0.28471310000000000      -0.12683759999999999        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           1  0.52149999999999996     
+ READ_NU read - CPRIMU:   1.5174999999999999E-002  0.54516019999999998        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           1  0.15959999999999999     
+ READ_NU read - CPRIMU:   0.0000000000000000        0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           1           9
+   6665.0000000000000        1000.0000000000000        228.00000000000000        64.709999999999994        21.059999999999999        7.4950000000000001        2.7970000000000002       0.52149999999999996       0.15959999999999999     
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         4         2         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           4           2           2
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           2   9.4390000000000001     
+ READ_NU read - CPRIMU:   3.8163500000000003E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           2   2.0019999999999998     
+ READ_NU read - CPRIMU:  0.20949250000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           2  0.54559999999999997     
+ READ_NU read - CPRIMU:  0.50844769999999995        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           2  0.15170000000000000     
+ READ_NU read - CPRIMU:   0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           2           4
+   9.4390000000000001        2.0019999999999998       0.54559999999999997       0.15170000000000000     
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         1         1         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           1           1           3
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           3  0.55000000000000004     
+ READ_NU read - CPRIMU:   1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           3           1
+  0.55000000000000004     
+
+  Output from FIND_POS: New element
+
+  Info about the basis set file: your basis has no documentation.
+  Basis set: cc-pVDZ-DK_ogc                                                                  
+  Basis set:
+      Max.ang.quantum no.:    2  Blocks:    1    1    1
+ BASLIB: Q, QEFF, INTQ   6.0000000000000000        6.0000000000000000                6
+ BASLIB: BASNAM HUCKEL                                                                          
+  Basis set file used for this atomic type with Z =   6 :
+  Trying file: "/work/sdujk/kjellgren/test/ano-4"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+  Basis set:
+      Max.ang.quantum no.:    1  Blocks:    1    1
+
+  Atomic type no.    4
+  --------------------
+  Nuclear charge:   8.00000
+  Number of symmetry independent centers:    4
+   Symmetry independent centers:
+      O     -2.501420000000000  -4.328420000000000  -2.086670000000000
+      O     -2.501420000000000   4.328420000000000  -2.086670000000000
+      O     -0.000240000000000   0.000000000000000   5.774470000000000
+      O      5.001000000000000   0.000000000000000  -2.085990000000000
+  Number of basis sets to read;    2
+  The basis set is "cc-pVDZ-DK_ogc" from the basis set library.
+ BASLIB: Q, QEFF, INTQ   8.0000000000000000        8.0000000000000000                8
+ BASLIB: BASNAM cc-pVDZ-DK_ogc                                                                  
+
+
+                                Output from BASLIB
+                                ------------------
+
+ ISTART =          16
+ BASTMP = cc-pVDZ-DK_ogc                                                                  
+ IPOLST =           0
+ POLFUN = F
+ ANO    = F
+ SADLEJ = F
+ NQVD   = F
+  Basis set file used for this atomic type with Z =   8 :
+  Trying file: "/work/sdujk/kjellgren/test/cc-pVDZ-DK_ogc"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/cc-pVDZ-DK_ogc"
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         9         3         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           9           3           1
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           1   11720.000000000000     
+ READ_NU read - CPRIMU:   9.7750000000000007E-004  -2.2060000000000000E-004   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           1   1759.0000000000000     
+ READ_NU read - CPRIMU:   5.8106000000000000E-003  -1.3435000000000001E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           1   400.80000000000001     
+ READ_NU read - CPRIMU:   2.8364899999999998E-002  -6.4009999999999996E-003   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           1   113.70000000000000     
+ READ_NU read - CPRIMU:  0.10543110000000000       -2.5927499999999999E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           1   37.030000000000001     
+ READ_NU read - CPRIMU:  0.28344700000000000       -7.1128600000000000E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           1   13.270000000000000     
+ READ_NU read - CPRIMU:  0.44828440000000003      -0.16561529999999999        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           1   5.0250000000000004     
+ READ_NU read - CPRIMU:  0.27029439999999999      -0.11608069999999999        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           1   1.0129999999999999     
+ READ_NU read - CPRIMU:   1.5403099999999999E-002  0.55852409999999997        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           1  0.30230000000000001     
+ READ_NU read - CPRIMU:   0.0000000000000000        0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           1           9
+   11720.000000000000        1759.0000000000000        400.80000000000001        113.70000000000000        37.030000000000001        13.270000000000000        5.0250000000000004        1.0129999999999999       0.30230000000000001     
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         4         2         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           4           2           2
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           2   17.699999999999999     
+ READ_NU read - CPRIMU:   4.3155300000000001E-002   0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           2   3.8540000000000001     
+ READ_NU read - CPRIMU:  0.22898630000000000        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           2   1.0460000000000000     
+ READ_NU read - CPRIMU:  0.50860830000000001        0.0000000000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           2  0.27529999999999999     
+ READ_NU read - CPRIMU:   0.0000000000000000        1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           2           4
+   17.699999999999999        3.8540000000000001        1.0460000000000000       0.27529999999999999     
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         1         1         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           1           1           3
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           3   1.1850000000000001     
+ READ_NU read - CPRIMU:   1.0000000000000000     
+ READ_NU...NBLOCK,INTEXP=           3           1
+   1.1850000000000001     
+
+  Output from FIND_POS: New element
+
+  Info about the basis set file: your basis has no documentation.
+  Basis set: cc-pVDZ-DK_ogc                                                                  
+  Basis set:
+      Max.ang.quantum no.:    2  Blocks:    1    1    1
+ BASLIB: Q, QEFF, INTQ   8.0000000000000000        8.0000000000000000                8
+ BASLIB: BASNAM HUCKEL                                                                          
+  Basis set file used for this atomic type with Z =   8 :
+  Trying file: "/work/sdujk/kjellgren/test/ano-4"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+  Basis set:
+      Max.ang.quantum no.:    1  Blocks:    1    1
+
+  Atomic type no.    5
+  --------------------
+  Nuclear charge:  26.00000
+  Number of symmetry independent centers:    1
+   Symmetry independent centers:
+      Fe00   0.000920000000000   0.000000000000000   0.377890000000000
+  Number of basis sets to read;    2
+  The basis set is "MINAO" from the basis set library.
+ BASLIB: Q, QEFF, INTQ   26.000000000000000        26.000000000000000               26
+ BASLIB: BASNAM MINAO                                                                           
+
+
+                                Output from BASLIB
+                                ------------------
+
+ ISTART =           7
+ BASTMP = MINAO                                                                           
+ IPOLST =           0
+ POLFUN = F
+ ANO    = F
+ SADLEJ = F
+ NQVD   = F
+  Basis set file used for this atomic type with Z =  26 :
+  Trying file: "/work/sdujk/kjellgren/test/MINAO"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/MINAO"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/MINAO"
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG        20         4         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:          20           4           1
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           1   4316265.0000000000     
+ READ_NU read - CPRIMU:   8.0487999999999999E-006  -4.1559999999999997E-006   9.5321800000000001E-007  -2.0630099999999999E-007
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           1   646342.40000000002     
+ READ_NU read - CPRIMU:   6.2582999999999994E-005  -3.2314000000000003E-005   7.4146100000000000E-006  -1.6041700000000001E-006
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           1   147089.70000000001     
+ READ_NU read - CPRIMU:   3.2902000000000002E-004  -1.6995000000000001E-004   3.8983899999999998E-005  -8.4384399999999998E-006
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           1   41661.519999999997     
+ READ_NU read - CPRIMU:   1.3874000000000000E-003  -7.1714000000000001E-004   1.6471500000000001E-004  -3.5631499999999999E-005
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           1   13590.770000000000     
+ READ_NU read - CPRIMU:   5.0232999999999996E-003  -2.6036000000000002E-003   5.9859799999999999E-004  -1.2951000000000000E-004
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           1   4905.7500000000000     
+ READ_NU read - CPRIMU:   1.6101000000000001E-002  -8.3990999999999996E-003   1.9423900000000000E-003  -4.2015299999999999E-004
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           1   1912.7460000000001     
+ READ_NU read - CPRIMU:   4.5900000000000003E-002  -2.4341000000000002E-002   5.6872399999999997E-003  -1.2319500000000001E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           1   792.60429999999997     
+ READ_NU read - CPRIMU:  0.11361540000000001       -6.2519000000000005E-002   1.5013300000000000E-002  -3.2489200000000002E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           1   344.80650000000003     
+ READ_NU read - CPRIMU:  0.22838690000000000      -0.13659289999999999        3.4524600000000003E-002  -7.4937199999999997E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          10           1   155.89990000000000     
+ READ_NU read - CPRIMU:  0.32211590000000001      -0.23127070000000000        6.4958199999999994E-002  -1.4101000000000001E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          11           1   72.230909999999994     
+ READ_NU read - CPRIMU:  0.23836610000000000      -0.23837340000000001        7.7161900000000005E-002  -1.6916000000000000E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          12           1   32.725059999999999     
+ READ_NU read - CPRIMU:   7.4047000000000002E-002   3.1237999999999998E-002  -1.8734100000000000E-002   4.2180999999999998E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          13           1   15.667619999999999     
+ READ_NU read - CPRIMU:   9.2142000000000002E-002  0.50868179999999996      -0.30091849999999998        6.8338099999999999E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          14           1   7.5034830000000001     
+ READ_NU read - CPRIMU:   9.3397999999999995E-002  0.49876949999999998      -0.45546609999999998       0.10982010000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          15           1   3.3122229999999999     
+ READ_NU read - CPRIMU:   1.5740000000000001E-002   9.0336000000000000E-002  0.12864629999999999       -4.0090099999999997E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          16           1   1.5584709999999999     
+ READ_NU read - CPRIMU:  -4.1867000000000000E-004  -6.0052999999999999E-003  0.71833159999999996      -0.21747390000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          17           1  0.68391400000000002     
+ READ_NU read - CPRIMU:   5.3763000000000000E-005   2.3125000000000001E-004  0.40517429999999999      -0.24651350000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          18           1  0.14675700000000000     
+ READ_NU read - CPRIMU:  -3.8167000000000002E-005  -5.6437000000000002E-004   2.1682300000000002E-002  0.27314349999999998     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          19           1   7.0583000000000007E-002
+ READ_NU read - CPRIMU:   4.3195999999999998E-005   4.9923000000000003E-004  -8.3435699999999998E-003  0.57483209999999996     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          20           1   3.1448999999999998E-002
+ READ_NU read - CPRIMU:  -3.4010000000000001E-006  -1.0153000000000000E-004   3.6589800000000000E-003  0.30127130000000002     
+ READ_NU...NBLOCK,INTEXP=           1          20
+   4316265.0000000000        646342.40000000002        147089.70000000001        41661.519999999997        13590.770000000000        4905.7500000000000        1912.7460000000001        792.60429999999997        344.80650000000003        155.89990000000000        72.230909999999994        32.725059999999999        15.667619999999999        7.5034830000000001        3.3122229999999999        1.5584709999999999       0.68391400000000002       0.14675700000000000        7.0583000000000007E-002   3.1448999999999998E-002
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG        16         2         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:          16           2           2
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           2   17745.689999999999     
+ READ_NU read - CPRIMU:   4.1000000000000000E-005  -1.5000000000000000E-005
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           2   4200.7209999999995     
+ READ_NU read - CPRIMU:   3.6900000000000002E-004  -1.2999999999999999E-004
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           2   1364.4290000000001     
+ READ_NU read - CPRIMU:   2.1289999999999998E-003  -7.5100000000000004E-004
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           2   522.08060000000000     
+ READ_NU read - CPRIMU:   9.3690000000000006E-003  -3.3289999999999999E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           2   221.45949999999999     
+ READ_NU read - CPRIMU:   3.3097000000000001E-002  -1.1912000000000001E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           2   100.90960000000000     
+ READ_NU read - CPRIMU:   9.4431000000000001E-002  -3.4932999999999999E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           2   48.401150000000001     
+ READ_NU read - CPRIMU:  0.20807700000000001       -7.9989000000000005E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           2   23.985360000000000     
+ READ_NU read - CPRIMU:  0.33233299999999999      -0.13463600000000001     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           9           2   12.182499999999999     
+ READ_NU read - CPRIMU:  0.33298699999999998      -0.13859800000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          10           2   6.2422979999999999     
+ READ_NU read - CPRIMU:  0.15684300000000001        3.0277999999999999E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          11           2   3.1109439999999999     
+ READ_NU read - CPRIMU:   2.1548999999999999E-002  0.33321600000000001     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          12           2   1.5099579999999999     
+ READ_NU read - CPRIMU:  -2.0950000000000001E-003  0.45615299999999998     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          13           2  0.71084499999999995     
+ READ_NU read - CPRIMU:  -1.7390000000000001E-003  0.28505100000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          14           2  0.27318999999999999     
+ READ_NU read - CPRIMU:  -2.9999999999999997E-004   4.6143999999999998E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          15           2  0.10423300000000001     
+ READ_NU read - CPRIMU:   2.9000000000000000E-005  -3.2490000000000002E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)          16           2   3.8289999999999998E-002
+ READ_NU read - CPRIMU:  -1.1000000000000000E-005   1.3569999999999999E-003
+ READ_NU...NBLOCK,INTEXP=           2          16
+   17745.689999999999        4200.7209999999995        1364.4290000000001        522.08060000000000        221.45949999999999        100.90960000000000        48.401150000000001        23.985360000000000        12.182499999999999        6.2422979999999999        3.1109439999999999        1.5099579999999999       0.71084499999999995       0.27318999999999999       0.10423300000000001        3.8289999999999998E-002
+
+  Output from FIND_POS... read INTEXP, INTORB, INTISG         8         1         0
+
+
+                               Output from READ_NU
+                               -------------------
+
+ INTEXP,INTORB,NBLOCK:           8           1           3
+ IPRINT=          10
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           1           3   113.34399999999999     
+ READ_NU read - CPRIMU:   3.5300000000000002E-003
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           2           3   33.641399999999997     
+ READ_NU read - CPRIMU:   2.5784000000000001E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           3           3   12.331000000000000     
+ READ_NU read - CPRIMU:   9.9118999999999999E-002
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           4           3   4.9947800000000004     
+ READ_NU read - CPRIMU:  0.23907300000000001     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           5           3   2.0728000000000000     
+ READ_NU read - CPRIMU:  0.35719899999999999     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           6           3  0.83075299999999996     
+ READ_NU read - CPRIMU:  0.36218800000000001     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           7           3  0.30917800000000001     
+ READ_NU read - CPRIMU:  0.23646100000000000     
+ READ_NU read - J,NBLOCK,ALPHA(J,NBLOCK)           8           3  0.10013000000000000     
+ READ_NU read - CPRIMU:   6.0117999999999998E-002
+ READ_NU...NBLOCK,INTEXP=           3           8
+   113.34399999999999        33.641399999999997        12.331000000000000        4.9947800000000004        2.0728000000000000       0.83075299999999996       0.30917800000000001       0.10013000000000000     
+
+  Output from FIND_POS: Reached end of file
+  Basis set:
+      Max.ang.quantum no.:    2  Blocks:    1    1    1
+ BASLIB: Q, QEFF, INTQ   26.000000000000000        26.000000000000000               26
+ BASLIB: BASNAM HUCKEL                                                                          
+  Basis set file used for this atomic type with Z =  26 :
+  Trying file: "/work/sdujk/kjellgren/test/ano-4"
+  Trying file: "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+     "/gpfs/gss1/work/sdujk/kjellgren/programs/dalton/srdft_dalton_gcc/basis/ano-4"
+  Basis set:
+      Max.ang.quantum no.:    2  Blocks:    1    1    1
+  IPTAX(*,1)      1    2    3
+  IPTAX(*,2)      1    2    3
+  NAXREP(*,1)     3
+  NAXREP(*,2)     3
+
+
+                         SYMGRP: Point group information
+                         -------------------------------
+
+@    Point group: C1 
+  Fe          0.00092   0.00000   0.37789         26.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  N           0.00062   0.00000   3.51545          7.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  C           2.99855   0.00000  -1.12906          6.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  C          -1.49900  -2.59520  -1.12928          6.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  C          -1.49900   2.59520  -1.12928          6.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  O          -2.50142  -4.32842  -2.08667          8.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  O          -2.50142   4.32842  -2.08667          8.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  O          -0.00024   0.00000   5.77447          8.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  O           5.00100   0.00000  -2.08599          8.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+  Fe00        0.00092   0.00000   0.37789         26.00000000
+                Stabilizer  0, with 0 symmetry equivalent atoms
+
+
+
+                                 Isotopic Masses
+                                 ---------------
+
+                           Fe         55.934939
+                           N          14.003074
+                           C          12.000000
+                           C          12.000000
+                           C          12.000000
+                           O          15.994915
+                           O          15.994915
+                           O          15.994915
+                           O          15.994915
+                           Fe00       55.934939
+
+                       Total mass:   225.852612 amu
+                       Natural abundance:  80.303 %
+
+ Center-of-mass coordinates (a.u.):    0.000376   -0.000000    0.190810
+ Center-of-mass coordinates (Angs):    0.000199   -0.000000    0.100972
+
+
+  Atoms and basis sets
+  --------------------
+
+  Number of atom types :    5
+  Total number of atoms:   10
+
+  label    atoms   charge   prim   cont     basis
+  ----------------------------------------------------------------------
+  Fe          1   26.0000   122    43      [20s16p8d2f|6s5p3d1f]                              
+  N           1    7.0000    26    14      [9s4p1d|3s2p1d]                                    
+  C           3    6.0000    26    14      [9s4p1d|3s2p1d]                                    
+  O           4    8.0000    26    14      [9s4p1d|3s2p1d]                                    
+  Fe          1   26.0000   108    15      [20s16p8d|4s2p1d]                                  
+  ----------------------------------------------------------------------
+  total:     10  109.0000   438   170
+  ----------------------------------------------------------------------
+  Spherical harmonic basis used.
+
+  Threshold for neglecting AO integrals:  1.00D-12
+
+
+  Cartesian Coordinates (a.u.)
+  ----------------------------
+
+  Total number of coordinates:   30
+  Fe      :     1  x   0.0009200000    2  y   0.0000000000    3  z   0.3778900000
+  N       :     4  x   0.0006200000    5  y   0.0000000000    6  z   3.5154500000
+  C       :     7  x   2.9985500000    8  y   0.0000000000    9  z  -1.1290600000
+  C       :    10  x  -1.4990000000   11  y  -2.5952000000   12  z  -1.1292800000
+  C       :    13  x  -1.4990000000   14  y   2.5952000000   15  z  -1.1292800000
+  O       :    16  x  -2.5014200000   17  y  -4.3284200000   18  z  -2.0866700000
+  O       :    19  x  -2.5014200000   20  y   4.3284200000   21  z  -2.0866700000
+  O       :    22  x  -0.0002400000   23  y   0.0000000000   24  z   5.7744700000
+  O       :    25  x   5.0010000000   26  y   0.0000000000   27  z  -2.0859900000
+  Fe00    :    28  x   0.0009200000   29  y   0.0000000000   30  z   0.3778900000
+
+
+   Interatomic separations (in Angstrom):
+   --------------------------------------
+
+            Fe          N           C           C           C           O     
+            ------      ------      ------      ------      ------      ------
+ Fe    :    0.000000
+ N     :    1.660325    0.000000
+ C     :    1.775442    2.925305    0.000000
+ C     :    1.775418    2.925227    2.747802    0.000000
+ C     :    1.775418    2.925227    2.747802    2.746641    0.000000
+ O     :    2.949705    3.973383    3.738176    1.174427    3.736529    0.000000
+ O     :    2.949705    3.973383    3.738176    3.736529    1.174427    4.581002
+ O     :    2.855747    1.195422    3.982967    3.982673    3.982673    4.929837
+ O     :    2.949730    3.973410    1.174430    3.738118    3.738118    4.583467
+ Fe00  :    0.000000    1.660325    1.775442    1.775418    1.775418    2.949705
+
+            O           O           O           Fe00  
+            ------      ------      ------      ------
+ O     :    0.000000
+ O     :    4.929837    0.000000
+ O     :    4.583467    4.930138    0.000000
+ Fe00  :    2.949705    2.855747    2.949730    0.000000
+
+
+  Max    interatomic separation is    4.9301 Angstrom (    9.3166 Bohr)
+  between atoms    9 and    8, "O     " and "O     ".
+
+  Min YX interatomic separation is    0.0000 Angstrom (    0.0000 Bohr)
+
+@ WARNING: Number of short HX and YX bond lengths:    0    1
+@ WARNING: If not intentional, maybe your coordinates were in Angstrom,
+@ WARNING: but "Angstrom" was not specified in .mol file
+
+
+  Bond distances (Angstrom):
+  --------------------------
+
+                  atom 1     atom 2       distance
+                  ------     ------       --------
+  bond distance:  N          Fe           1.660325
+  bond distance:  C          Fe           1.775442
+  bond distance:  C          Fe           1.775418
+  bond distance:  C          Fe           1.775418
+  bond distance:  O          C            1.174427
+  bond distance:  O          C            1.174427
+  bond distance:  O          N            1.195422
+  bond distance:  O          C            1.174430
+  bond distance:  Fe00       Fe           0.000000
+  bond distance:  Fe00       N            1.660325
+  bond distance:  Fe00       C            1.775442
+  bond distance:  Fe00       C            1.775418
+  bond distance:  Fe00       C            1.775418
+
+
+  Bond angles (degrees):
+  ----------------------
+
+                  atom 1     atom 2     atom 3         angle
+                  ------     ------     ------         -----
+  bond angle:     N          Fe         C            116.695
+  bond angle:     N          Fe         C            116.691
+  bond angle:     N          Fe         C            116.691
+  bond angle:     N          Fe         Fe00          90.000
+  bond angle:     C          Fe         C            101.400
+  bond angle:     C          Fe         C            101.400
+  bond angle:     C          Fe         Fe00          90.000
+  bond angle:     C          Fe         C            101.342
+  bond angle:     C          Fe         Fe00          90.000
+  bond angle:     C          Fe         Fe00          90.000
+  bond angle:     Fe         N          O            179.984
+  bond angle:     Fe         N          Fe00           0.000
+  bond angle:     O          N          Fe00         179.984
+  bond angle:     Fe         C          O            178.853
+  bond angle:     Fe         C          Fe00           0.000
+  bond angle:     O          C          Fe00         178.853
+  bond angle:     Fe         C          O            178.861
+  bond angle:     Fe         C          Fe00           0.000
+  bond angle:     O          C          Fe00         178.861
+  bond angle:     Fe         C          O            178.861
+  bond angle:     Fe         C          Fe00           0.000
+  bond angle:     O          C          Fe00         178.861
+  bond angle:     Fe         Fe00       N             90.000
+  bond angle:     Fe         Fe00       C             90.000
+  bond angle:     Fe         Fe00       C             90.000
+  bond angle:     Fe         Fe00       C             90.000
+  bond angle:     N          Fe00       C            116.695
+  bond angle:     N          Fe00       C            116.691
+  bond angle:     N          Fe00       C            116.691
+  bond angle:     C          Fe00       C            101.400
+  bond angle:     C          Fe00       C            101.400
+  bond angle:     C          Fe00       C            101.342
+
+
+
+
+ Moments of inertia (u*A**2) :
+       484.427331   -0.000000   -0.041251
+        -0.000000  484.719172    0.000000
+        -0.041251    0.000000  426.482931
+
+
+ Principal moments of inertia (u*A**2) and principal axes
+ --------------------------------------------------------
+
+   IA     426.482902          0.000712    0.000000    1.000000
+   IB     484.427360          1.000000    0.000000   -0.000712
+   IC     484.719172          0.000000    1.000000    0.000000
+
+
+ Rotational constants
+ --------------------
+
+               A                   B                   C
+
+           1184.9924           1043.2503           1042.6223 MHz
+            0.039527            0.034799            0.034778 cm-1
+
+
+@  Nuclear repulsion energy :  954.302531900516 Hartree
+
+
+  Orbital exponents and contraction coefficients
+  ----------------------------------------------
+
+
+  Fe     1s      1  4316265.000000      0.0001   -0.0001    0.0000   -0.0000   -0.0000
+                                        0.0000
+   gen. cont.    2   646342.400000      0.0004   -0.0002    0.0000   -0.0000   -0.0000
+                                        0.0000
+                 3   147089.700000      0.0011   -0.0006    0.0001   -0.0000   -0.0001
+                                        0.0000
+                 4    41661.520000      0.0029   -0.0015    0.0004   -0.0001   -0.0002
+                                        0.0000
+                 5    13590.770000      0.0076   -0.0039    0.0009   -0.0002   -0.0004
+                                        0.0000
+                 6     4905.750000      0.0198   -0.0104    0.0025   -0.0005   -0.0011
+                                        0.0000
+                 7     1912.746000      0.0507   -0.0271    0.0065   -0.0014   -0.0027
+                                        0.0000
+                 8      792.604300      0.1187   -0.0658    0.0161   -0.0035   -0.0074
+                                        0.0000
+                 9      344.806500      0.2312   -0.1391    0.0357   -0.0078   -0.0145
+                                        0.0000
+                10      155.899900      0.3193   -0.2301    0.0655   -0.0144   -0.0319
+                                        0.0000
+                11       72.230910      0.2336   -0.2297    0.0744   -0.0164   -0.0254
+                                        0.0000
+                12       32.725060      0.0740    0.0461   -0.0257    0.0056   -0.0079
+                                        0.0000
+                13       15.667620      0.0910    0.5151   -0.3086    0.0712    0.1915
+                                        0.0000
+                14        7.503483      0.0889    0.4872   -0.4465    0.1078    0.1482
+                                        0.0000
+                15        3.312223      0.0143    0.0844    0.1490   -0.0443    0.0508
+                                        0.0000
+                16        1.558471     -0.0004   -0.0059    0.7204   -0.2260   -1.0122
+                                        0.0000
+                17        0.683914      0.0000   -0.0000    0.3897   -0.2376    0.3423
+                                        0.0000
+                18        0.146757     -0.0000   -0.0005    0.0192    0.2978    1.8573
+                                        0.0000
+                19        0.070583      0.0000    0.0004   -0.0070    0.5655   -1.0637
+                                        0.0000
+                20        0.031449      0.0000    0.0000    0.0000    0.0000    0.0000
+                                        1.0000
+
+  Fe     2px    21    17745.690000      0.0001   -0.0000    0.0000    0.0000    0.0000
+   gen. cont.   22     4200.721000      0.0006   -0.0002    0.0000    0.0001    0.0000
+                23     1364.429000      0.0026   -0.0009    0.0002    0.0003    0.0000
+                24      522.080600      0.0103   -0.0037    0.0008    0.0012    0.0000
+                25      221.459500      0.0348   -0.0125    0.0027    0.0041    0.0000
+                26      100.909600      0.0967   -0.0358    0.0078    0.0120    0.0000
+                27       48.401150      0.2100   -0.0808    0.0177    0.0266    0.0000
+                28       23.985360      0.3325   -0.1347    0.0297    0.0457    0.0000
+                29       12.182500      0.3308   -0.1369    0.0304    0.0450    0.0000
+                30        6.242298      0.1547    0.0337   -0.0108   -0.0130    0.0000
+                31        3.110944      0.0210    0.3357   -0.0877   -0.1414    0.0000
+                32        1.509958     -0.0023    0.4555   -0.1285   -0.1941    0.0000
+                33        0.710845     -0.0019    0.2818   -0.0740   -0.1018    0.0000
+                34        0.272598     -0.0003    0.0452    0.2155    0.4679    0.0000
+                35        0.103972      0.0000   -0.0032    0.5720    0.6242    0.0000
+                36        0.038166      0.0000    0.0000    0.0000    0.0000    1.0000
+
+  Fe     2py    37    17745.690000      0.0001   -0.0000    0.0000    0.0000    0.0000
+   gen. cont.   38     4200.721000      0.0006   -0.0002    0.0000    0.0001    0.0000
+                39     1364.429000      0.0026   -0.0009    0.0002    0.0003    0.0000
+                40      522.080600      0.0103   -0.0037    0.0008    0.0012    0.0000
+                41      221.459500      0.0348   -0.0125    0.0027    0.0041    0.0000
+                42      100.909600      0.0967   -0.0358    0.0078    0.0120    0.0000
+                43       48.401150      0.2100   -0.0808    0.0177    0.0266    0.0000
+                44       23.985360      0.3325   -0.1347    0.0297    0.0457    0.0000
+                45       12.182500      0.3308   -0.1369    0.0304    0.0450    0.0000
+                46        6.242298      0.1547    0.0337   -0.0108   -0.0130    0.0000
+                47        3.110944      0.0210    0.3357   -0.0877   -0.1414    0.0000
+                48        1.509958     -0.0023    0.4555   -0.1285   -0.1941    0.0000
+                49        0.710845     -0.0019    0.2818   -0.0740   -0.1018    0.0000
+                50        0.272598     -0.0003    0.0452    0.2155    0.4679    0.0000
+                51        0.103972      0.0000   -0.0032    0.5720    0.6242    0.0000
+                52        0.038166      0.0000    0.0000    0.0000    0.0000    1.0000
+
+  Fe     2pz    53    17745.690000      0.0001   -0.0000    0.0000    0.0000    0.0000
+   gen. cont.   54     4200.721000      0.0006   -0.0002    0.0000    0.0001    0.0000
+                55     1364.429000      0.0026   -0.0009    0.0002    0.0003    0.0000
+                56      522.080600      0.0103   -0.0037    0.0008    0.0012    0.0000
+                57      221.459500      0.0348   -0.0125    0.0027    0.0041    0.0000
+                58      100.909600      0.0967   -0.0358    0.0078    0.0120    0.0000
+                59       48.401150      0.2100   -0.0808    0.0177    0.0266    0.0000
+                60       23.985360      0.3325   -0.1347    0.0297    0.0457    0.0000
+                61       12.182500      0.3308   -0.1369    0.0304    0.0450    0.0000
+                62        6.242298      0.1547    0.0337   -0.0108   -0.0130    0.0000
+                63        3.110944      0.0210    0.3357   -0.0877   -0.1414    0.0000
+                64        1.509958     -0.0023    0.4555   -0.1285   -0.1941    0.0000
+                65        0.710845     -0.0019    0.2818   -0.0740   -0.1018    0.0000
+                66        0.272598     -0.0003    0.0452    0.2155    0.4679    0.0000
+                67        0.103972      0.0000   -0.0032    0.5720    0.6242    0.0000
+                68        0.038166      0.0000    0.0000    0.0000    0.0000    1.0000
+
+  Fe     3d2-   69      114.884000      0.0035   -0.0039    0.0000
+   gen. cont.   70       33.887800      0.0255   -0.0282    0.0000
+                71       12.373000      0.0984   -0.1116    0.0000
+                72        4.999250      0.2379   -0.2728    0.0000
+                73        2.070430      0.3565   -0.3172    0.0000
+                74        0.828183      0.3628    0.0521    0.0000
+                75        0.307547      0.2388    0.5613    0.0000
+                76        0.099455      0.0000    0.0000    1.0000
+
+  Fe     3d1-   77      114.884000      0.0035   -0.0039    0.0000
+   gen. cont.   78       33.887800      0.0255   -0.0282    0.0000
+                79       12.373000      0.0984   -0.1116    0.0000
+                80        4.999250      0.2379   -0.2728    0.0000
+                81        2.070430      0.3565   -0.3172    0.0000
+                82        0.828183      0.3628    0.0521    0.0000
+                83        0.307547      0.2388    0.5613    0.0000
+                84        0.099455      0.0000    0.0000    1.0000
+
+  Fe     3d0    85      114.884000      0.0035   -0.0039    0.0000
+   gen. cont.   86       33.887800      0.0255   -0.0282    0.0000
+                87       12.373000      0.0984   -0.1116    0.0000
+                88        4.999250      0.2379   -0.2728    0.0000
+                89        2.070430      0.3565   -0.3172    0.0000
+                90        0.828183      0.3628    0.0521    0.0000
+                91        0.307547      0.2388    0.5613    0.0000
+                92        0.099455      0.0000    0.0000    1.0000
+
+  Fe     3d1+   93      114.884000      0.0035   -0.0039    0.0000
+   gen. cont.   94       33.887800      0.0255   -0.0282    0.0000
+                95       12.373000      0.0984   -0.1116    0.0000
+                96        4.999250      0.2379   -0.2728    0.0000
+                97        2.070430      0.3565   -0.3172    0.0000
+                98        0.828183      0.3628    0.0521    0.0000
+                99        0.307547      0.2388    0.5613    0.0000
+               100        0.099455      0.0000    0.0000    1.0000
+
+  Fe     3d2+  101      114.884000      0.0035   -0.0039    0.0000
+   gen. cont.  102       33.887800      0.0255   -0.0282    0.0000
+               103       12.373000      0.0984   -0.1116    0.0000
+               104        4.999250      0.2379   -0.2728    0.0000
+               105        2.070430      0.3565   -0.3172    0.0000
+               106        0.828183      0.3628    0.0521    0.0000
+               107        0.307547      0.2388    0.5613    0.0000
+               108        0.099455      0.0000    0.0000    1.0000
+
+  Fe     4f3-  109        3.224300      0.4222
+   seg. cont.  110        0.775800      0.7715
+
+  Fe     4f2-  111        3.224300      0.4222
+   seg. cont.  112        0.775800      0.7715
+
+  Fe     4f1-  113        3.224300      0.4222
+   seg. cont.  114        0.775800      0.7715
+
+  Fe     4f0   115        3.224300      0.4222
+   seg. cont.  116        0.775800      0.7715
+
+  Fe     4f1+  117        3.224300      0.4222
+   seg. cont.  118        0.775800      0.7715
+
+  Fe     4f2+  119        3.224300      0.4222
+   seg. cont.  120        0.775800      0.7715
+
+  Fe     4f3+  121        3.224300      0.4222
+   seg. cont.  122        0.775800      0.7715
+
+  N      1s    123     9046.000000      0.0009   -0.0002    0.0000
+   gen. cont.  124     1357.000000      0.0056   -0.0013    0.0000
+               125      309.300000      0.0278   -0.0061    0.0000
+               126       87.730000      0.1037   -0.0247    0.0000
+               127       28.560000      0.2790   -0.0676    0.0000
+               128       10.210000      0.4482   -0.1582    0.0000
+               129        3.838000      0.2777   -0.1212    0.0000
+               130        0.746600      0.0154    0.5499    0.0000
+               131        0.224800      0.0000    0.0000    1.0000
+
+  N      2px   132       13.550000      0.0400    0.0000
+   seg. cont.  133        2.917000      0.2172    0.0000
+               134        0.797300      0.5102    0.0000
+               135        0.218500      0.0000    1.0000
+
+  N      2py   136       13.550000      0.0400    0.0000
+   seg. cont.  137        2.917000      0.2172    0.0000
+               138        0.797300      0.5102    0.0000
+               139        0.218500      0.0000    1.0000
+
+  N      2pz   140       13.550000      0.0400    0.0000
+   seg. cont.  141        2.917000      0.2172    0.0000
+               142        0.797300      0.5102    0.0000
+               143        0.218500      0.0000    1.0000
+
+  N      3d2-  144        0.817000      1.0000
+
+  N      3d1-  145        0.817000      1.0000
+
+  N      3d0   146        0.817000      1.0000
+
+  N      3d1+  147        0.817000      1.0000
+
+  N      3d2+  148        0.817000      1.0000
+
+  C      1s    149     6665.000000      0.0009   -0.0002    0.0000
+   gen. cont.  150     1000.000000      0.0055   -0.0012    0.0000
+               151      228.000000      0.0274   -0.0058    0.0000
+               152       64.710000      0.1021   -0.0234    0.0000
+               153       21.060000      0.2749   -0.0640    0.0000
+               154        7.495000      0.4483   -0.1501    0.0000
+               155        2.797000      0.2847   -0.1268    0.0000
+               156        0.521500      0.0152    0.5452    0.0000
+               157        0.159600      0.0000    0.0000    1.0000
+
+  C      2px   158        9.439000      0.0382    0.0000
+   seg. cont.  159        2.002000      0.2095    0.0000
+               160        0.545600      0.5084    0.0000
+               161        0.151700      0.0000    1.0000
+
+  C      2py   162        9.439000      0.0382    0.0000
+   seg. cont.  163        2.002000      0.2095    0.0000
+               164        0.545600      0.5084    0.0000
+               165        0.151700      0.0000    1.0000
+
+  C      2pz   166        9.439000      0.0382    0.0000
+   seg. cont.  167        2.002000      0.2095    0.0000
+               168        0.545600      0.5084    0.0000
+               169        0.151700      0.0000    1.0000
+
+  C      3d2-  170        0.550000      1.0000
+
+  C      3d1-  171        0.550000      1.0000
+
+  C      3d0   172        0.550000      1.0000
+
+  C      3d1+  173        0.550000      1.0000
+
+  C      3d2+  174        0.550000      1.0000
+
+  C      1s    175     6665.000000      0.0009   -0.0002    0.0000
+   gen. cont.  176     1000.000000      0.0055   -0.0012    0.0000
+               177      228.000000      0.0274   -0.0058    0.0000
+               178       64.710000      0.1021   -0.0234    0.0000
+               179       21.060000      0.2749   -0.0640    0.0000
+               180        7.495000      0.4483   -0.1501    0.0000
+               181        2.797000      0.2847   -0.1268    0.0000
+               182        0.521500      0.0152    0.5452    0.0000
+               183        0.159600      0.0000    0.0000    1.0000
+
+  C      2px   184        9.439000      0.0382    0.0000
+   seg. cont.  185        2.002000      0.2095    0.0000
+               186        0.545600      0.5084    0.0000
+               187        0.151700      0.0000    1.0000
+
+  C      2py   188        9.439000      0.0382    0.0000
+   seg. cont.  189        2.002000      0.2095    0.0000
+               190        0.545600      0.5084    0.0000
+               191        0.151700      0.0000    1.0000
+
+  C      2pz   192        9.439000      0.0382    0.0000
+   seg. cont.  193        2.002000      0.2095    0.0000
+               194        0.545600      0.5084    0.0000
+               195        0.151700      0.0000    1.0000
+
+  C      3d2-  196        0.550000      1.0000
+
+  C      3d1-  197        0.550000      1.0000
+
+  C      3d0   198        0.550000      1.0000
+
+  C      3d1+  199        0.550000      1.0000
+
+  C      3d2+  200        0.550000      1.0000
+
+  C      1s    201     6665.000000      0.0009   -0.0002    0.0000
+   gen. cont.  202     1000.000000      0.0055   -0.0012    0.0000
+               203      228.000000      0.0274   -0.0058    0.0000
+               204       64.710000      0.1021   -0.0234    0.0000
+               205       21.060000      0.2749   -0.0640    0.0000
+               206        7.495000      0.4483   -0.1501    0.0000
+               207        2.797000      0.2847   -0.1268    0.0000
+               208        0.521500      0.0152    0.5452    0.0000
+               209        0.159600      0.0000    0.0000    1.0000
+
+  C      2px   210        9.439000      0.0382    0.0000
+   seg. cont.  211        2.002000      0.2095    0.0000
+               212        0.545600      0.5084    0.0000
+               213        0.151700      0.0000    1.0000
+
+  C      2py   214        9.439000      0.0382    0.0000
+   seg. cont.  215        2.002000      0.2095    0.0000
+               216        0.545600      0.5084    0.0000
+               217        0.151700      0.0000    1.0000
+
+  C      2pz   218        9.439000      0.0382    0.0000
+   seg. cont.  219        2.002000      0.2095    0.0000
+               220        0.545600      0.5084    0.0000
+               221        0.151700      0.0000    1.0000
+
+  C      3d2-  222        0.550000      1.0000
+
+  C      3d1-  223        0.550000      1.0000
+
+  C      3d0   224        0.550000      1.0000
+
+  C      3d1+  225        0.550000      1.0000
+
+  C      3d2+  226        0.550000      1.0000
+
+  O      1s    227    11720.000000      0.0010   -0.0002    0.0000
+   gen. cont.  228     1759.000000      0.0058   -0.0013    0.0000
+               229      400.800000      0.0284   -0.0064    0.0000
+               230      113.700000      0.1054   -0.0259    0.0000
+               231       37.030000      0.2834   -0.0711    0.0000
+               232       13.270000      0.4483   -0.1656    0.0000
+               233        5.025000      0.2703   -0.1161    0.0000
+               234        1.013000      0.0154    0.5585    0.0000
+               235        0.302300      0.0000    0.0000    1.0000
+
+  O      2px   236       17.700000      0.0432    0.0000
+   seg. cont.  237        3.854000      0.2290    0.0000
+               238        1.046000      0.5086    0.0000
+               239        0.275300      0.0000    1.0000
+
+  O      2py   240       17.700000      0.0432    0.0000
+   seg. cont.  241        3.854000      0.2290    0.0000
+               242        1.046000      0.5086    0.0000
+               243        0.275300      0.0000    1.0000
+
+  O      2pz   244       17.700000      0.0432    0.0000
+   seg. cont.  245        3.854000      0.2290    0.0000
+               246        1.046000      0.5086    0.0000
+               247        0.275300      0.0000    1.0000
+
+  O      3d2-  248        1.185000      1.0000
+
+  O      3d1-  249        1.185000      1.0000
+
+  O      3d0   250        1.185000      1.0000
+
+  O      3d1+  251        1.185000      1.0000
+
+  O      3d2+  252        1.185000      1.0000
+
+  O      1s    253    11720.000000      0.0010   -0.0002    0.0000
+   gen. cont.  254     1759.000000      0.0058   -0.0013    0.0000
+               255      400.800000      0.0284   -0.0064    0.0000
+               256      113.700000      0.1054   -0.0259    0.0000
+               257       37.030000      0.2834   -0.0711    0.0000
+               258       13.270000      0.4483   -0.1656    0.0000
+               259        5.025000      0.2703   -0.1161    0.0000
+               260        1.013000      0.0154    0.5585    0.0000
+               261        0.302300      0.0000    0.0000    1.0000
+
+  O      2px   262       17.700000      0.0432    0.0000
+   seg. cont.  263        3.854000      0.2290    0.0000
+               264        1.046000      0.5086    0.0000
+               265        0.275300      0.0000    1.0000
+
+  O      2py   266       17.700000      0.0432    0.0000
+   seg. cont.  267        3.854000      0.2290    0.0000
+               268        1.046000      0.5086    0.0000
+               269        0.275300      0.0000    1.0000
+
+  O      2pz   270       17.700000      0.0432    0.0000
+   seg. cont.  271        3.854000      0.2290    0.0000
+               272        1.046000      0.5086    0.0000
+               273        0.275300      0.0000    1.0000
+
+  O      3d2-  274        1.185000      1.0000
+
+  O      3d1-  275        1.185000      1.0000
+
+  O      3d0   276        1.185000      1.0000
+
+  O      3d1+  277        1.185000      1.0000
+
+  O      3d2+  278        1.185000      1.0000
+
+  O      1s    279    11720.000000      0.0010   -0.0002    0.0000
+   gen. cont.  280     1759.000000      0.0058   -0.0013    0.0000
+               281      400.800000      0.0284   -0.0064    0.0000
+               282      113.700000      0.1054   -0.0259    0.0000
+               283       37.030000      0.2834   -0.0711    0.0000
+               284       13.270000      0.4483   -0.1656    0.0000
+               285        5.025000      0.2703   -0.1161    0.0000
+               286        1.013000      0.0154    0.5585    0.0000
+               287        0.302300      0.0000    0.0000    1.0000
+
+  O      2px   288       17.700000      0.0432    0.0000
+   seg. cont.  289        3.854000      0.2290    0.0000
+               290        1.046000      0.5086    0.0000
+               291        0.275300      0.0000    1.0000
+
+  O      2py   292       17.700000      0.0432    0.0000
+   seg. cont.  293        3.854000      0.2290    0.0000
+               294        1.046000      0.5086    0.0000
+               295        0.275300      0.0000    1.0000
+
+  O      2pz   296       17.700000      0.0432    0.0000
+   seg. cont.  297        3.854000      0.2290    0.0000
+               298        1.046000      0.5086    0.0000
+               299        0.275300      0.0000    1.0000
+
+  O      3d2-  300        1.185000      1.0000
+
+  O      3d1-  301        1.185000      1.0000
+
+  O      3d0   302        1.185000      1.0000
+
+  O      3d1+  303        1.185000      1.0000
+
+  O      3d2+  304        1.185000      1.0000
+
+  O      1s    305    11720.000000      0.0010   -0.0002    0.0000
+   gen. cont.  306     1759.000000      0.0058   -0.0013    0.0000
+               307      400.800000      0.0284   -0.0064    0.0000
+               308      113.700000      0.1054   -0.0259    0.0000
+               309       37.030000      0.2834   -0.0711    0.0000
+               310       13.270000      0.4483   -0.1656    0.0000
+               311        5.025000      0.2703   -0.1161    0.0000
+               312        1.013000      0.0154    0.5585    0.0000
+               313        0.302300      0.0000    0.0000    1.0000
+
+  O      2px   314       17.700000      0.0432    0.0000
+   seg. cont.  315        3.854000      0.2290    0.0000
+               316        1.046000      0.5086    0.0000
+               317        0.275300      0.0000    1.0000
+
+  O      2py   318       17.700000      0.0432    0.0000
+   seg. cont.  319        3.854000      0.2290    0.0000
+               320        1.046000      0.5086    0.0000
+               321        0.275300      0.0000    1.0000
+
+  O      2pz   322       17.700000      0.0432    0.0000
+   seg. cont.  323        3.854000      0.2290    0.0000
+               324        1.046000      0.5086    0.0000
+               325        0.275300      0.0000    1.0000
+
+  O      3d2-  326        1.185000      1.0000
+
+  O      3d1-  327        1.185000      1.0000
+
+  O      3d0   328        1.185000      1.0000
+
+  O      3d1+  329        1.185000      1.0000
+
+  O      3d2+  330        1.185000      1.0000
+
+  Fe00   1s    331  4316265.000000      0.0000   -0.0000    0.0000   -0.0000
+   gen. cont.  332   646342.400000      0.0001   -0.0000    0.0000   -0.0000
+               333   147089.700000      0.0003   -0.0002    0.0000   -0.0000
+               334    41661.520000      0.0014   -0.0007    0.0002   -0.0000
+               335    13590.770000      0.0050   -0.0026    0.0006   -0.0001
+               336     4905.750000      0.0161   -0.0084    0.0019   -0.0004
+               337     1912.746000      0.0459   -0.0243    0.0057   -0.0012
+               338      792.604300      0.1136   -0.0625    0.0150   -0.0032
+               339      344.806500      0.2284   -0.1366    0.0345   -0.0075
+               340      155.899900      0.3221   -0.2313    0.0650   -0.0141
+               341       72.230910      0.2384   -0.2384    0.0772   -0.0169
+               342       32.725060      0.0740    0.0312   -0.0187    0.0042
+               343       15.667620      0.0921    0.5087   -0.3009    0.0683
+               344        7.503483      0.0934    0.4988   -0.4555    0.1098
+               345        3.312223      0.0157    0.0903    0.1286   -0.0401
+               346        1.558471     -0.0004   -0.0060    0.7183   -0.2175
+               347        0.683914      0.0001    0.0002    0.4052   -0.2465
+               348        0.146757     -0.0000   -0.0006    0.0217    0.2731
+               349        0.070583      0.0000    0.0005   -0.0083    0.5748
+               350        0.031449     -0.0000   -0.0001    0.0037    0.3013
+
+  Fe00   2px   351    17745.690000      0.0000   -0.0000
+   gen. cont.  352     4200.721000      0.0004   -0.0001
+               353     1364.429000      0.0021   -0.0008
+               354      522.080600      0.0094   -0.0033
+               355      221.459500      0.0331   -0.0119
+               356      100.909600      0.0944   -0.0349
+               357       48.401150      0.2081   -0.0800
+               358       23.985360      0.3323   -0.1346
+               359       12.182500      0.3330   -0.1386
+               360        6.242298      0.1568    0.0303
+               361        3.110944      0.0215    0.3332
+               362        1.509958     -0.0021    0.4562
+               363        0.710845     -0.0017    0.2851
+               364        0.273190     -0.0003    0.0461
+               365        0.104233      0.0000   -0.0032
+               366        0.038290     -0.0000    0.0014
+
+  Fe00   2py   367    17745.690000      0.0000   -0.0000
+   gen. cont.  368     4200.721000      0.0004   -0.0001
+               369     1364.429000      0.0021   -0.0008
+               370      522.080600      0.0094   -0.0033
+               371      221.459500      0.0331   -0.0119
+               372      100.909600      0.0944   -0.0349
+               373       48.401150      0.2081   -0.0800
+               374       23.985360      0.3323   -0.1346
+               375       12.182500      0.3330   -0.1386
+               376        6.242298      0.1568    0.0303
+               377        3.110944      0.0215    0.3332
+               378        1.509958     -0.0021    0.4562
+               379        0.710845     -0.0017    0.2851
+               380        0.273190     -0.0003    0.0461
+               381        0.104233      0.0000   -0.0032
+               382        0.038290     -0.0000    0.0014
+
+  Fe00   2pz   383    17745.690000      0.0000   -0.0000
+   gen. cont.  384     4200.721000      0.0004   -0.0001
+               385     1364.429000      0.0021   -0.0008
+               386      522.080600      0.0094   -0.0033
+               387      221.459500      0.0331   -0.0119
+               388      100.909600      0.0944   -0.0349
+               389       48.401150      0.2081   -0.0800
+               390       23.985360      0.3323   -0.1346
+               391       12.182500      0.3330   -0.1386
+               392        6.242298      0.1568    0.0303
+               393        3.110944      0.0215    0.3332
+               394        1.509958     -0.0021    0.4562
+               395        0.710845     -0.0017    0.2851
+               396        0.273190     -0.0003    0.0461
+               397        0.104233      0.0000   -0.0032
+               398        0.038290     -0.0000    0.0014
+
+  Fe00   3d2-  399      113.344000      0.0035
+   seg. cont.  400       33.641400      0.0258
+               401       12.331000      0.0991
+               402        4.994780      0.2391
+               403        2.072800      0.3572
+               404        0.830753      0.3622
+               405        0.309178      0.2365
+               406        0.100130      0.0601
+
+  Fe00   3d1-  407      113.344000      0.0035
+   seg. cont.  408       33.641400      0.0258
+               409       12.331000      0.0991
+               410        4.994780      0.2391
+               411        2.072800      0.3572
+               412        0.830753      0.3622
+               413        0.309178      0.2365
+               414        0.100130      0.0601
+
+  Fe00   3d0   415      113.344000      0.0035
+   seg. cont.  416       33.641400      0.0258
+               417       12.331000      0.0991
+               418        4.994780      0.2391
+               419        2.072800      0.3572
+               420        0.830753      0.3622
+               421        0.309178      0.2365
+               422        0.100130      0.0601
+
+  Fe00   3d1+  423      113.344000      0.0035
+   seg. cont.  424       33.641400      0.0258
+               425       12.331000      0.0991
+               426        4.994780      0.2391
+               427        2.072800      0.3572
+               428        0.830753      0.3622
+               429        0.309178      0.2365
+               430        0.100130      0.0601
+
+  Fe00   3d2+  431      113.344000      0.0035
+   seg. cont.  432       33.641400      0.0258
+               433       12.331000      0.0991
+               434        4.994780      0.2391
+               435        2.072800      0.3572
+               436        0.830753      0.3622
+               437        0.309178      0.2365
+               438        0.100130      0.0601
+
+
+  Contracted Orbitals
+  -------------------
+
+    1  Fe      1s      1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+    2  Fe      1s      1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+    3  Fe      1s      1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+    4  Fe      1s      1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+    5  Fe      1s      1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19
+    6  Fe      1s     20
+    7  Fe      2px    21   22   23   24   25   26   27   28   29   30   31   32   33   34   35
+    8  Fe      2py    37   38   39   40   41   42   43   44   45   46   47   48   49   50   51
+    9  Fe      2pz    53   54   55   56   57   58   59   60   61   62   63   64   65   66   67
+   10  Fe      2px    21   22   23   24   25   26   27   28   29   30   31   32   33   34   35
+   11  Fe      2py    37   38   39   40   41   42   43   44   45   46   47   48   49   50   51
+   12  Fe      2pz    53   54   55   56   57   58   59   60   61   62   63   64   65   66   67
+   13  Fe      2px    21   22   23   24   25   26   27   28   29   30   31   32   33   34   35
+   14  Fe      2py    37   38   39   40   41   42   43   44   45   46   47   48   49   50   51
+   15  Fe      2pz    53   54   55   56   57   58   59   60   61   62   63   64   65   66   67
+   16  Fe      2px    21   22   23   24   25   26   27   28   29   30   31   32   33   34   35
+   17  Fe      2py    37   38   39   40   41   42   43   44   45   46   47   48   49   50   51
+   18  Fe      2pz    53   54   55   56   57   58   59   60   61   62   63   64   65   66   67
+   19  Fe      2px    36
+   20  Fe      2py    52
+   21  Fe      2pz    68
+   22  Fe      3d2-   69   70   71   72   73   74   75
+   23  Fe      3d1-   77   78   79   80   81   82   83
+   24  Fe      3d0    85   86   87   88   89   90   91
+   25  Fe      3d1+   93   94   95   96   97   98   99
+   26  Fe      3d2+  101  102  103  104  105  106  107
+   27  Fe      3d2-   69   70   71   72   73   74   75
+   28  Fe      3d1-   77   78   79   80   81   82   83
+   29  Fe      3d0    85   86   87   88   89   90   91
+   30  Fe      3d1+   93   94   95   96   97   98   99
+   31  Fe      3d2+  101  102  103  104  105  106  107
+   32  Fe      3d2-   76
+   33  Fe      3d1-   84
+   34  Fe      3d0    92
+   35  Fe      3d1+  100
+   36  Fe      3d2+  108
+   37  Fe      4f3-  109  110
+   38  Fe      4f2-  111  112
+   39  Fe      4f1-  113  114
+   40  Fe      4f0   115  116
+   41  Fe      4f1+  117  118
+   42  Fe      4f2+  119  120
+   43  Fe      4f3+  121  122
+   44  N       1s    123  124  125  126  127  128  129  130
+   45  N       1s    123  124  125  126  127  128  129  130
+   46  N       1s    131
+   47  N       2px   132  133  134
+   48  N       2py   136  137  138
+   49  N       2pz   140  141  142
+   50  N       2px   135
+   51  N       2py   139
+   52  N       2pz   143
+   53  N       3d2-  144
+   54  N       3d1-  145
+   55  N       3d0   146
+   56  N       3d1+  147
+   57  N       3d2+  148
+   58  C       1s    149  150  151  152  153  154  155  156
+   59  C       1s    149  150  151  152  153  154  155  156
+   60  C       1s    157
+   61  C       2px   158  159  160
+   62  C       2py   162  163  164
+   63  C       2pz   166  167  168
+   64  C       2px   161
+   65  C       2py   165
+   66  C       2pz   169
+   67  C       3d2-  170
+   68  C       3d1-  171
+   69  C       3d0   172
+   70  C       3d1+  173
+   71  C       3d2+  174
+   72  C       1s    175  176  177  178  179  180  181  182
+   73  C       1s    175  176  177  178  179  180  181  182
+   74  C       1s    183
+   75  C       2px   184  185  186
+   76  C       2py   188  189  190
+   77  C       2pz   192  193  194
+   78  C       2px   187
+   79  C       2py   191
+   80  C       2pz   195
+   81  C       3d2-  196
+   82  C       3d1-  197
+   83  C       3d0   198
+   84  C       3d1+  199
+   85  C       3d2+  200
+   86  C       1s    201  202  203  204  205  206  207  208
+   87  C       1s    201  202  203  204  205  206  207  208
+   88  C       1s    209
+   89  C       2px   210  211  212
+   90  C       2py   214  215  216
+   91  C       2pz   218  219  220
+   92  C       2px   213
+   93  C       2py   217
+   94  C       2pz   221
+   95  C       3d2-  222
+   96  C       3d1-  223
+   97  C       3d0   224
+   98  C       3d1+  225
+   99  C       3d2+  226
+  100  O       1s    227  228  229  230  231  232  233  234
+  101  O       1s    227  228  229  230  231  232  233  234
+  102  O       1s    235
+  103  O       2px   236  237  238
+  104  O       2py   240  241  242
+  105  O       2pz   244  245  246
+  106  O       2px   239
+  107  O       2py   243
+  108  O       2pz   247
+  109  O       3d2-  248
+  110  O       3d1-  249
+  111  O       3d0   250
+  112  O       3d1+  251
+  113  O       3d2+  252
+  114  O       1s    253  254  255  256  257  258  259  260
+  115  O       1s    253  254  255  256  257  258  259  260
+  116  O       1s    261
+  117  O       2px   262  263  264
+  118  O       2py   266  267  268
+  119  O       2pz   270  271  272
+  120  O       2px   265
+  121  O       2py   269
+  122  O       2pz   273
+  123  O       3d2-  274
+  124  O       3d1-  275
+  125  O       3d0   276
+  126  O       3d1+  277
+  127  O       3d2+  278
+  128  O       1s    279  280  281  282  283  284  285  286
+  129  O       1s    279  280  281  282  283  284  285  286
+  130  O       1s    287
+  131  O       2px   288  289  290
+  132  O       2py   292  293  294
+  133  O       2pz   296  297  298
+  134  O       2px   291
+  135  O       2py   295
+  136  O       2pz   299
+  137  O       3d2-  300
+  138  O       3d1-  301
+  139  O       3d0   302
+  140  O       3d1+  303
+  141  O       3d2+  304
+  142  O       1s    305  306  307  308  309  310  311  312
+  143  O       1s    305  306  307  308  309  310  311  312
+  144  O       1s    313
+  145  O       2px   314  315  316
+  146  O       2py   318  319  320
+  147  O       2pz   322  323  324
+  148  O       2px   317
+  149  O       2py   321
+  150  O       2pz   325
+  151  O       3d2-  326
+  152  O       3d1-  327
+  153  O       3d0   328
+  154  O       3d1+  329
+  155  O       3d2+  330
+  156  Fe00    1s    331  332  333  334  335  336  337  338  339  340  341  342  343  344  345  346  347  348  349  350
+  157  Fe00    1s    331  332  333  334  335  336  337  338  339  340  341  342  343  344  345  346  347  348  349  350
+  158  Fe00    1s    331  332  333  334  335  336  337  338  339  340  341  342  343  344  345  346  347  348  349  350
+  159  Fe00    1s    331  332  333  334  335  336  337  338  339  340  341  342  343  344  345  346  347  348  349  350
+  160  Fe00    2px   351  352  353  354  355  356  357  358  359  360  361  362  363  364  365  366
+  161  Fe00    2py   367  368  369  370  371  372  373  374  375  376  377  378  379  380  381  382
+  162  Fe00    2pz   383  384  385  386  387  388  389  390  391  392  393  394  395  396  397  398
+  163  Fe00    2px   351  352  353  354  355  356  357  358  359  360  361  362  363  364  365  366
+  164  Fe00    2py   367  368  369  370  371  372  373  374  375  376  377  378  379  380  381  382
+  165  Fe00    2pz   383  384  385  386  387  388  389  390  391  392  393  394  395  396  397  398
+  166  Fe00    3d2-  399  400  401  402  403  404  405  406
+  167  Fe00    3d1-  407  408  409  410  411  412  413  414
+  168  Fe00    3d0   415  416  417  418  419  420  421  422
+  169  Fe00    3d1+  423  424  425  426  427  428  429  430
+  170  Fe00    3d2+  431  432  433  434  435  436  437  438
+
+
+
+
+  Orbital exponents and normalized contraction coefficients
+  ---------------------------------------------------------
+
+
+  Fe     1s      1  4316265.000000      9.4486   -4.8593    1.1481   -0.3584   -0.4907
+                                        0.0000
+   gen. cont.    2   646342.400000      6.5798   -3.3955    0.7966   -0.2373   -0.3543
+                                        0.0000
+                 3   147089.700000      5.9900   -3.0994    0.7231   -0.2061   -0.3225
+                                        0.0000
+                 4    41661.520000      6.0417   -3.1299    0.7320   -0.2125   -0.3346
+                                        0.0000
+                 5    13590.770000      6.7920   -3.5337    0.8285   -0.2394   -0.3662
+                                        0.0000
+                 6     4905.750000      8.2794   -4.3431    1.0250   -0.2968   -0.4777
+                                        0.0000
+                 7     1912.746000     10.4581   -5.5809    1.3306   -0.3854   -0.5765
+                                        0.0000
+                 8      792.604300     12.6403   -7.0029    1.7158   -0.4973   -0.8187
+                                        0.0000
+                 9      344.806500     13.1829   -7.9316    2.0396   -0.5917   -0.8579
+                                        0.0000
+                10      155.899900     10.0409   -7.2369    2.0618   -0.6000   -1.0402
+                                        0.0000
+                11       72.230910      4.1259   -4.0555    1.3151   -0.3841   -0.4649
+                                        0.0000
+                12       32.725060      0.7218    0.4495   -0.2509    0.0731   -0.0799
+                                        0.0000
+                13       15.667620      0.5105    2.8908   -1.7334    0.5307    1.1161
+                                        0.0000
+                14        7.503483      0.2872    1.5741   -1.4438    0.4625    0.4975
+                                        0.0000
+                15        3.312223      0.0250    0.1477    0.2609   -0.1028    0.0923
+                                        0.0000
+                16        1.558471     -0.0004   -0.0059    0.7166   -0.2983   -1.0451
+                                        0.0000
+                17        0.683914      0.0000   -0.0000    0.2090   -0.1691    0.1906
+                                        0.0000
+                18        0.146757     -0.0000   -0.0001    0.0032    0.0668    0.3260
+                                        0.0000
+                19        0.070583      0.0000    0.0000   -0.0007    0.0733   -0.1078
+                                        0.0000
+                20        0.031449      0.0000    0.0000    0.0000    0.0000    0.0000
+                                        0.0532
+
+  Fe     2px    21    17745.690000     35.9097  -12.5551    3.6753    4.2394    0.0000
+   gen. cont.   22     4200.721000     27.2842   -9.6421    2.9668    3.3000    0.0000
+                23     1364.429000     30.8274  -10.9113    3.3233    3.7148    0.0000
+                24      522.080600     36.6217  -13.0493    3.9806    4.4976    0.0000
+                25      221.459500     42.3180  -15.2710    4.6638    5.2039    0.0000
+                26      100.909600     44.0796  -16.3444    5.0045    5.6520    0.0000
+                27       48.401150     38.2200  -14.7091    4.5153    5.0244    0.0000
+                28       23.985360     25.1541  -10.1924    3.1484    3.5863    0.0000
+                29       12.182500     10.7309   -4.4422    1.3790    1.5153    0.0000
+                30        6.242298      2.1762    0.4742   -0.2118   -0.1898    0.0000
+                31        3.110944      0.1235    1.9770   -0.7223   -0.8636    0.0000
+                32        1.509958     -0.0056    1.0869   -0.4287   -0.4805    0.0000
+                33        0.710845     -0.0017    0.2622   -0.0963   -0.0982    0.0000
+                34        0.272598     -0.0001    0.0127    0.0846    0.1362    0.0000
+                35        0.103972      0.0000   -0.0003    0.0673    0.0545    0.0000
+                36        0.038166      0.0000    0.0000    0.0000    0.0000    0.0240
+
+  Fe     2py    37    17745.690000     35.9097  -12.5551    3.6753    4.2394    0.0000
+   gen. cont.   38     4200.721000     27.2842   -9.6421    2.9668    3.3000    0.0000
+                39     1364.429000     30.8274  -10.9113    3.3233    3.7148    0.0000
+                40      522.080600     36.6217  -13.0493    3.9806    4.4976    0.0000
+                41      221.459500     42.3180  -15.2710    4.6638    5.2039    0.0000
+                42      100.909600     44.0796  -16.3444    5.0045    5.6520    0.0000
+                43       48.401150     38.2200  -14.7091    4.5153    5.0244    0.0000
+                44       23.985360     25.1541  -10.1924    3.1484    3.5863    0.0000
+                45       12.182500     10.7309   -4.4422    1.3790    1.5153    0.0000
+                46        6.242298      2.1762    0.4742   -0.2118   -0.1898    0.0000
+                47        3.110944      0.1235    1.9770   -0.7223   -0.8636    0.0000
+                48        1.509958     -0.0056    1.0869   -0.4287   -0.4805    0.0000
+                49        0.710845     -0.0017    0.2622   -0.0963   -0.0982    0.0000
+                50        0.272598     -0.0001    0.0127    0.0846    0.1362    0.0000
+                51        0.103972      0.0000   -0.0003    0.0673    0.0545    0.0000
+                52        0.038166      0.0000    0.0000    0.0000    0.0000    0.0240
+
+  Fe     2pz    53    17745.690000     35.9097  -12.5551    3.6753    4.2394    0.0000
+   gen. cont.   54     4200.721000     27.2842   -9.6421    2.9668    3.3000    0.0000
+                55     1364.429000     30.8274  -10.9113    3.3233    3.7148    0.0000
+                56      522.080600     36.6217  -13.0493    3.9806    4.4976    0.0000
+                57      221.459500     42.3180  -15.2710    4.6638    5.2039    0.0000
+                58      100.909600     44.0796  -16.3444    5.0045    5.6520    0.0000
+                59       48.401150     38.2200  -14.7091    4.5153    5.0244    0.0000
+                60       23.985360     25.1541  -10.1924    3.1484    3.5863    0.0000
+                61       12.182500     10.7309   -4.4422    1.3790    1.5153    0.0000
+                62        6.242298      2.1762    0.4742   -0.2118   -0.1898    0.0000
+                63        3.110944      0.1235    1.9770   -0.7223   -0.8636    0.0000
+                64        1.509958     -0.0056    1.0869   -0.4287   -0.4805    0.0000
+                65        0.710845     -0.0017    0.2622   -0.0963   -0.0982    0.0000
+                66        0.272598     -0.0001    0.0127    0.0846    0.1362    0.0000
+                67        0.103972      0.0000   -0.0003    0.0673    0.0545    0.0000
+                68        0.038166      0.0000    0.0000    0.0000    0.0000    0.0240
+
+  Fe     3d2-   69      114.884000     41.2590  -57.8918    0.0000
+   gen. cont.   70       33.887800     35.2379  -49.4854    0.0000
+                71       12.373000     23.2638  -33.5687    0.0000
+                72        4.999250     11.5227  -16.8087    0.0000
+                73        2.070430      3.6920   -4.1775    0.0000
+                74        0.828183      0.7559    0.1380    0.0000
+                75        0.307547      0.0879    0.2628    0.0000
+                76        0.099455      0.0000    0.0000    0.0502
+
+  Fe     3d1-   77      114.884000     41.2590  -57.8918    0.0000
+   gen. cont.   78       33.887800     35.2379  -49.4854    0.0000
+                79       12.373000     23.2638  -33.5687    0.0000
+                80        4.999250     11.5227  -16.8087    0.0000
+                81        2.070430      3.6920   -4.1775    0.0000
+                82        0.828183      0.7559    0.1380    0.0000
+                83        0.307547      0.0879    0.2628    0.0000
+                84        0.099455      0.0000    0.0000    0.0502
+
+  Fe     3d0    85      114.884000     41.2590  -57.8918    0.0000
+   gen. cont.   86       33.887800     35.2379  -49.4854    0.0000
+                87       12.373000     23.2638  -33.5687    0.0000
+                88        4.999250     11.5227  -16.8087    0.0000
+                89        2.070430      3.6920   -4.1775    0.0000
+                90        0.828183      0.7559    0.1380    0.0000
+                91        0.307547      0.0879    0.2628    0.0000
+                92        0.099455      0.0000    0.0000    0.0502
+
+  Fe     3d1+   93      114.884000     41.2590  -57.8918    0.0000
+   gen. cont.   94       33.887800     35.2379  -49.4854    0.0000
+                95       12.373000     23.2638  -33.5687    0.0000
+                96        4.999250     11.5227  -16.8087    0.0000
+                97        2.070430      3.6920   -4.1775    0.0000
+                98        0.828183      0.7559    0.1380    0.0000
+                99        0.307547      0.0879    0.2628    0.0000
+               100        0.099455      0.0000    0.0000    0.0502
+
+  Fe     3d2+  101      114.884000     41.2590  -57.8918    0.0000
+   gen. cont.  102       33.887800     35.2379  -49.4854    0.0000
+               103       12.373000     23.2638  -33.5687    0.0000
+               104        4.999250     11.5227  -16.8087    0.0000
+               105        2.070430      3.6920   -4.1775    0.0000
+               106        0.828183      0.7559    0.1380    0.0000
+               107        0.307547      0.0879    0.2628    0.0000
+               108        0.099455      0.0000    0.0000    0.0502
+
+  Fe     4f3-  109        3.224300     33.5389
+   seg. cont.  110        0.775800      2.4846
+
+  Fe     4f2-  111        3.224300     33.5389
+   seg. cont.  112        0.775800      2.4846
+
+  Fe     4f1-  113        3.224300     33.5389
+   seg. cont.  114        0.775800      2.4846
+
+  Fe     4f0   115        3.224300     33.5389
+   seg. cont.  116        0.775800      2.4846
+
+  Fe     4f1+  117        3.224300     33.5389
+   seg. cont.  118        0.775800      2.4846
+
+  Fe     4f2+  119        3.224300     33.5389
+   seg. cont.  120        0.775800      2.4846
+
+  Fe     4f3+  121        3.224300     33.5389
+   seg. cont.  122        0.775800      2.4846
+
+  N      1s    123     9046.000000      0.6016   -0.2624    0.0000
+   gen. cont.  124     1357.000000      0.8989   -0.4017    0.0000
+               125      309.300000      1.4609   -0.6370    0.0000
+               126       87.730000      2.1171   -1.0039    0.0000
+               127       28.560000      2.4554   -1.1844    0.0000
+               128       10.210000      1.8236   -1.2816    0.0000
+               129        3.838000      0.5425   -0.4713    0.0000
+               130        0.746600      0.0088    0.6263    0.0000
+               131        0.224800      0.0000    0.0000    0.2327
+
+  N      2px   132       13.550000      2.1880    0.0000
+   seg. cont.  133        2.917000      1.7419    0.0000
+               134        0.797300      0.8086    0.0000
+               135        0.218500      0.0000    0.2129
+
+  N      2py   136       13.550000      2.1880    0.0000
+   seg. cont.  137        2.917000      1.7419    0.0000
+               138        0.797300      0.8086    0.0000
+               139        0.218500      0.0000    0.2129
+
+  N      2pz   140       13.550000      2.1880    0.0000
+   seg. cont.  141        2.917000      1.7419    0.0000
+               142        0.797300      0.8086    0.0000
+               143        0.218500      0.0000    0.2129
+
+  N      3d2-  144        0.817000      2.0015
+
+  N      3d1-  145        0.817000      2.0015
+
+  N      3d0   146        0.817000      2.0015
+
+  N      3d1+  147        0.817000      2.0015
+
+  N      3d2+  148        0.817000      2.0015
+
+  C      1s    149     6665.000000      0.4475   -0.1902    0.0000
+   gen. cont.  150     1000.000000      0.6982   -0.3038    0.0000
+               151      228.000000      1.1438   -0.4861    0.0000
+               152       64.710000      1.6585   -0.7638    0.0000
+               153       21.060000      1.9253   -0.9003    0.0000
+               154        7.495000      1.4466   -0.9721    0.0000
+               155        2.797000      0.4386   -0.3922    0.0000
+               156        0.521500      0.0066    0.4783    0.0000
+               157        0.159600      0.0000    0.0000    0.1800
+
+  C      2px   158        9.439000      1.3458    0.0000
+   seg. cont.  159        2.002000      1.0634    0.0000
+               160        0.545600      0.5082    0.0000
+               161        0.151700      0.0000    0.1349
+
+  C      2py   162        9.439000      1.3458    0.0000
+   seg. cont.  163        2.002000      1.0634    0.0000
+               164        0.545600      0.5082    0.0000
+               165        0.151700      0.0000    0.1349
+
+  C      2pz   166        9.439000      1.3458    0.0000
+   seg. cont.  167        2.002000      1.0634    0.0000
+               168        0.545600      0.5082    0.0000
+               169        0.151700      0.0000    0.1349
+
+  C      3d2-  170        0.550000      1.0014
+
+  C      3d1-  171        0.550000      1.0014
+
+  C      3d0   172        0.550000      1.0014
+
+  C      3d1+  173        0.550000      1.0014
+
+  C      3d2+  174        0.550000      1.0014
+
+  C      1s    175     6665.000000      0.4475   -0.1902    0.0000
+   gen. cont.  176     1000.000000      0.6982   -0.3038    0.0000
+               177      228.000000      1.1438   -0.4861    0.0000
+               178       64.710000      1.6585   -0.7638    0.0000
+               179       21.060000      1.9253   -0.9003    0.0000
+               180        7.495000      1.4466   -0.9721    0.0000
+               181        2.797000      0.4386   -0.3922    0.0000
+               182        0.521500      0.0066    0.4783    0.0000
+               183        0.159600      0.0000    0.0000    0.1800
+
+  C      2px   184        9.439000      1.3458    0.0000
+   seg. cont.  185        2.002000      1.0634    0.0000
+               186        0.545600      0.5082    0.0000
+               187        0.151700      0.0000    0.1349
+
+  C      2py   188        9.439000      1.3458    0.0000
+   seg. cont.  189        2.002000      1.0634    0.0000
+               190        0.545600      0.5082    0.0000
+               191        0.151700      0.0000    0.1349
+
+  C      2pz   192        9.439000      1.3458    0.0000
+   seg. cont.  193        2.002000      1.0634    0.0000
+               194        0.545600      0.5082    0.0000
+               195        0.151700      0.0000    0.1349
+
+  C      3d2-  196        0.550000      1.0014
+
+  C      3d1-  197        0.550000      1.0014
+
+  C      3d0   198        0.550000      1.0014
+
+  C      3d1+  199        0.550000      1.0014
+
+  C      3d2+  200        0.550000      1.0014
+
+  C      1s    201     6665.000000      0.4475   -0.1902    0.0000
+   gen. cont.  202     1000.000000      0.6982   -0.3038    0.0000
+               203      228.000000      1.1438   -0.4861    0.0000
+               204       64.710000      1.6585   -0.7638    0.0000
+               205       21.060000      1.9253   -0.9003    0.0000
+               206        7.495000      1.4466   -0.9721    0.0000
+               207        2.797000      0.4386   -0.3922    0.0000
+               208        0.521500      0.0066    0.4783    0.0000
+               209        0.159600      0.0000    0.0000    0.1800
+
+  C      2px   210        9.439000      1.3458    0.0000
+   seg. cont.  211        2.002000      1.0634    0.0000
+               212        0.545600      0.5082    0.0000
+               213        0.151700      0.0000    0.1349
+
+  C      2py   214        9.439000      1.3458    0.0000
+   seg. cont.  215        2.002000      1.0634    0.0000
+               216        0.545600      0.5082    0.0000
+               217        0.151700      0.0000    0.1349
+
+  C      2pz   218        9.439000      1.3458    0.0000
+   seg. cont.  219        2.002000      1.0634    0.0000
+               220        0.545600      0.5082    0.0000
+               221        0.151700      0.0000    0.1349
+
+  C      3d2-  222        0.550000      1.0014
+
+  C      3d1-  223        0.550000      1.0014
+
+  C      3d0   224        0.550000      1.0014
+
+  C      3d1+  225        0.550000      1.0014
+
+  C      3d2+  226        0.550000      1.0014
+
+  O      1s    227    11720.000000      0.7843   -0.3472    0.0000
+   gen. cont.  228     1759.000000      1.1243   -0.5099    0.0000
+               229      400.800000      1.8100   -0.8011    0.0000
+               230      113.700000      2.6151   -1.2614    0.0000
+               231       37.030000      3.0310   -1.4919    0.0000
+               232       13.270000      2.2202   -1.6089    0.0000
+               233        5.025000      0.6462   -0.5444    0.0000
+               234        1.013000      0.0111    0.7880    0.0000
+               235        0.302300      0.0000    0.0000    0.2906
+
+  O      2px   236       17.700000      3.2540    0.0000
+   seg. cont.  237        3.854000      2.5681    0.0000
+               238        1.046000      1.1174    0.0000
+               239        0.275300      0.0000    0.2842
+
+  O      2py   240       17.700000      3.2540    0.0000
+   seg. cont.  241        3.854000      2.5681    0.0000
+               242        1.046000      1.1174    0.0000
+               243        0.275300      0.0000    0.2842
+
+  O      2pz   244       17.700000      3.2540    0.0000
+   seg. cont.  245        3.854000      2.5681    0.0000
+               246        1.046000      1.1174    0.0000
+               247        0.275300      0.0000    0.2842
+
+  O      3d2-  248        1.185000      3.8369
+
+  O      3d1-  249        1.185000      3.8369
+
+  O      3d0   250        1.185000      3.8369
+
+  O      3d1+  251        1.185000      3.8369
+
+  O      3d2+  252        1.185000      3.8369
+
+  O      1s    253    11720.000000      0.7843   -0.3472    0.0000
+   gen. cont.  254     1759.000000      1.1243   -0.5099    0.0000
+               255      400.800000      1.8100   -0.8011    0.0000
+               256      113.700000      2.6151   -1.2614    0.0000
+               257       37.030000      3.0310   -1.4919    0.0000
+               258       13.270000      2.2202   -1.6089    0.0000
+               259        5.025000      0.6462   -0.5444    0.0000
+               260        1.013000      0.0111    0.7880    0.0000
+               261        0.302300      0.0000    0.0000    0.2906
+
+  O      2px   262       17.700000      3.2540    0.0000
+   seg. cont.  263        3.854000      2.5681    0.0000
+               264        1.046000      1.1174    0.0000
+               265        0.275300      0.0000    0.2842
+
+  O      2py   266       17.700000      3.2540    0.0000
+   seg. cont.  267        3.854000      2.5681    0.0000
+               268        1.046000      1.1174    0.0000
+               269        0.275300      0.0000    0.2842
+
+  O      2pz   270       17.700000      3.2540    0.0000
+   seg. cont.  271        3.854000      2.5681    0.0000
+               272        1.046000      1.1174    0.0000
+               273        0.275300      0.0000    0.2842
+
+  O      3d2-  274        1.185000      3.8369
+
+  O      3d1-  275        1.185000      3.8369
+
+  O      3d0   276        1.185000      3.8369
+
+  O      3d1+  277        1.185000      3.8369
+
+  O      3d2+  278        1.185000      3.8369
+
+  O      1s    279    11720.000000      0.7843   -0.3472    0.0000
+   gen. cont.  280     1759.000000      1.1243   -0.5099    0.0000
+               281      400.800000      1.8100   -0.8011    0.0000
+               282      113.700000      2.6151   -1.2614    0.0000
+               283       37.030000      3.0310   -1.4919    0.0000
+               284       13.270000      2.2202   -1.6089    0.0000
+               285        5.025000      0.6462   -0.5444    0.0000
+               286        1.013000      0.0111    0.7880    0.0000
+               287        0.302300      0.0000    0.0000    0.2906
+
+  O      2px   288       17.700000      3.2540    0.0000
+   seg. cont.  289        3.854000      2.5681    0.0000
+               290        1.046000      1.1174    0.0000
+               291        0.275300      0.0000    0.2842
+
+  O      2py   292       17.700000      3.2540    0.0000
+   seg. cont.  293        3.854000      2.5681    0.0000
+               294        1.046000      1.1174    0.0000
+               295        0.275300      0.0000    0.2842
+
+  O      2pz   296       17.700000      3.2540    0.0000
+   seg. cont.  297        3.854000      2.5681    0.0000
+               298        1.046000      1.1174    0.0000
+               299        0.275300      0.0000    0.2842
+
+  O      3d2-  300        1.185000      3.8369
+
+  O      3d1-  301        1.185000      3.8369
+
+  O      3d0   302        1.185000      3.8369
+
+  O      3d1+  303        1.185000      3.8369
+
+  O      3d2+  304        1.185000      3.8369
+
+  O      1s    305    11720.000000      0.7843   -0.3472    0.0000
+   gen. cont.  306     1759.000000      1.1243   -0.5099    0.0000
+               307      400.800000      1.8100   -0.8011    0.0000
+               308      113.700000      2.6151   -1.2614    0.0000
+               309       37.030000      3.0310   -1.4919    0.0000
+               310       13.270000      2.2202   -1.6089    0.0000
+               311        5.025000      0.6462   -0.5444    0.0000
+               312        1.013000      0.0111    0.7880    0.0000
+               313        0.302300      0.0000    0.0000    0.2906
+
+  O      2px   314       17.700000      3.2540    0.0000
+   seg. cont.  315        3.854000      2.5681    0.0000
+               316        1.046000      1.1174    0.0000
+               317        0.275300      0.0000    0.2842
+
+  O      2py   318       17.700000      3.2540    0.0000
+   seg. cont.  319        3.854000      2.5681    0.0000
+               320        1.046000      1.1174    0.0000
+               321        0.275300      0.0000    0.2842
+
+  O      2pz   322       17.700000      3.2540    0.0000
+   seg. cont.  323        3.854000      2.5681    0.0000
+               324        1.046000      1.1174    0.0000
+               325        0.275300      0.0000    0.2842
+
+  O      3d2-  326        1.185000      3.8369
+
+  O      3d1-  327        1.185000      3.8369
+
+  O      3d0   328        1.185000      3.8369
+
+  O      3d1+  329        1.185000      3.8369
+
+  O      3d2+  330        1.185000      3.8369
+
+  Fe00   1s    331  4316265.000000      0.5432   -0.2805    0.0643   -0.0139
+   gen. cont.  332   646342.400000      1.0167   -0.5250    0.1205   -0.0261
+               333   147089.700000      1.7612   -0.9097    0.2087   -0.0452
+               334    41661.520000      2.8835   -1.4904    0.3423   -0.0741
+               335    13590.770000      4.5064   -2.3357    0.5370   -0.1162
+               336     4905.750000      6.7265   -3.5089    0.8115   -0.1755
+               337     1912.746000      9.4616   -5.0175    1.1723   -0.2539
+               338      792.604300     12.0959   -6.6560    1.5984   -0.3459
+               339      344.806500     13.0246   -7.7897    1.9689   -0.4274
+               340      155.899900     10.1288   -7.2722    2.0426   -0.4434
+               341       72.230910      4.2092   -4.2093    1.3626   -0.2987
+               342       32.725060      0.7221    0.3046   -0.1827    0.0411
+               343       15.667620      0.5172    2.8550   -1.6889    0.3836
+               344        7.503483      0.3018    1.6116   -1.4717    0.3548
+               345        3.312223      0.0275    0.1581    0.2251   -0.0702
+               346        1.558471     -0.0004   -0.0060    0.7141   -0.2162
+               347        0.683914      0.0000    0.0001    0.2172   -0.1321
+               348        0.146757     -0.0000   -0.0001    0.0037    0.0462
+               349        0.070583      0.0000    0.0000   -0.0008    0.0561
+               350        0.031449     -0.0000   -0.0000    0.0002    0.0160
+
+  Fe00   2px   351    17745.690000     11.9699   -4.3792
+   gen. cont.  352     4200.721000     17.7878   -6.2667
+               353     1364.429000     25.1654   -8.8771
+               354      522.080600     33.3277  -11.8420
+               355      221.459500     40.3038  -14.5058
+               356      100.909600     43.0497  -15.9255
+               357       48.401150     37.8646  -14.5559
+               358       23.985360     25.1447  -10.1867
+               359       12.182500     10.8028   -4.4964
+               360        6.242298      2.2059    0.4258
+               361        3.110944      0.1269    1.9624
+               362        1.509958     -0.0050    1.0883
+               363        0.710845     -0.0016    0.2652
+               364        0.273190     -0.0001    0.0130
+               365        0.104233      0.0000   -0.0003
+               366        0.038290     -0.0000    0.0000
+
+  Fe00   2py   367    17745.690000     11.9699   -4.3792
+   gen. cont.  368     4200.721000     17.7878   -6.2667
+               369     1364.429000     25.1654   -8.8771
+               370      522.080600     33.3277  -11.8420
+               371      221.459500     40.3038  -14.5058
+               372      100.909600     43.0497  -15.9255
+               373       48.401150     37.8646  -14.5559
+               374       23.985360     25.1447  -10.1867
+               375       12.182500     10.8028   -4.4964
+               376        6.242298      2.2059    0.4258
+               377        3.110944      0.1269    1.9624
+               378        1.509958     -0.0050    1.0883
+               379        0.710845     -0.0016    0.2652
+               380        0.273190     -0.0001    0.0130
+               381        0.104233      0.0000   -0.0003
+               382        0.038290     -0.0000    0.0000
+
+  Fe00   2pz   383    17745.690000     11.9699   -4.3792
+   gen. cont.  384     4200.721000     17.7878   -6.2667
+               385     1364.429000     25.1654   -8.8771
+               386      522.080600     33.3277  -11.8420
+               387      221.459500     40.3038  -14.5058
+               388      100.909600     43.0497  -15.9255
+               389       48.401150     37.8646  -14.5559
+               390       23.985360     25.1447  -10.1867
+               391       12.182500     10.8028   -4.4964
+               392        6.242298      2.2059    0.4258
+               393        3.110944      0.1269    1.9624
+               394        1.509958     -0.0050    1.0883
+               395        0.710845     -0.0016    0.2652
+               396        0.273190     -0.0001    0.0130
+               397        0.104233      0.0000   -0.0003
+               398        0.038290     -0.0000    0.0000
+
+  Fe00   3d2-  399      113.344000     39.6225
+   seg. cont.  400       33.641400     34.5422
+               401       12.331000     22.9284
+               402        4.994780     11.3738
+               403        2.072800      3.6463
+               404        0.830753      0.7464
+               405        0.309178      0.0864
+               406        0.100130      0.0031
+
+  Fe00   3d1-  407      113.344000     39.6225
+   seg. cont.  408       33.641400     34.5422
+               409       12.331000     22.9284
+               410        4.994780     11.3738
+               411        2.072800      3.6463
+               412        0.830753      0.7464
+               413        0.309178      0.0864
+               414        0.100130      0.0031
+
+  Fe00   3d0   415      113.344000     39.6225
+   seg. cont.  416       33.641400     34.5422
+               417       12.331000     22.9284
+               418        4.994780     11.3738
+               419        2.072800      3.6463
+               420        0.830753      0.7464
+               421        0.309178      0.0864
+               422        0.100130      0.0031
+
+  Fe00   3d1+  423      113.344000     39.6225
+   seg. cont.  424       33.641400     34.5422
+               425       12.331000     22.9284
+               426        4.994780     11.3738
+               427        2.072800      3.6463
+               428        0.830753      0.7464
+               429        0.309178      0.0864
+               430        0.100130      0.0031
+
+  Fe00   3d2+  431      113.344000     39.6225
+   seg. cont.  432       33.641400     34.5422
+               433       12.331000     22.9284
+               434        4.994780     11.3738
+               435        2.072800      3.6463
+               436        0.830753      0.7464
+               437        0.309178      0.0864
+               438        0.100130      0.0031
+
+
+                            **************************
+                            *** Output from AOTOAO ***
+                            **************************
+
+
+
+       i -> IAOAO(i), JAOAO(i,1:2)
+       ---------------------------
+
+        1     1     1     1
+        2     2     2     2
+        3     3     3     3
+        4     4     4     4
+        5     5     5     5
+        6     6     6     6
+        7     7     7     7
+        8     8     8     8
+        9     9     9     9
+       10    10    10    10
+       11    11    11    11
+       12    12    12    12
+       13    13    13    13
+       14    14    14    14
+       15    15    15    15
+       16    16    16    16
+       17    17    17    17
+       18    18    18    18
+       19    19    19    19
+       20    20    20    20
+       21    21    21    21
+       22    22    22    24
+       23    23    23    25
+       24    24    24    23
+       25    25    25    26
+       26    26    26    22
+       27    27    27    29
+       28    28    28    30
+       29    29    29    28
+       30    30    30    31
+       31    31    31    27
+       32    32    32    34
+       33    33    33    35
+       34    34    34    33
+       35    35    35    36
+       36    36    36    32
+       37    37    37    40
+       38    38    38    41
+       39    39    39    39
+       40    40    40    42
+       41    41    41    38
+       42    42    42    43
+       43    43    43    37
+       44    44    44    44
+       45    45    45    45
+       46    46    46    46
+       47    47    47    47
+       48    48    48    48
+       49    49    49    49
+       50    50    50    50
+       51    51    51    51
+       52    52    52    52
+       53    53    53    55
+       54    54    54    56
+       55    55    55    54
+       56    56    56    57
+       57    57    57    53
+       58    58    58    58
+       59    59    59    59
+       60    60    60    60
+       61    61    61    61
+       62    62    62    62
+       63    63    63    63
+       64    64    64    64
+       65    65    65    65
+       66    66    66    66
+       67    67    67    69
+       68    68    68    70
+       69    69    69    68
+       70    70    70    71
+       71    71    71    67
+       72    72    72    72
+       73    73    73    73
+       74    74    74    74
+       75    75    75    75
+       76    76    76    76
+       77    77    77    77
+       78    78    78    78
+       79    79    79    79
+       80    80    80    80
+       81    81    81    83
+       82    82    82    84
+       83    83    83    82
+       84    84    84    85
+       85    85    85    81
+       86    86    86    86
+       87    87    87    87
+       88    88    88    88
+       89    89    89    89
+       90    90    90    90
+       91    91    91    91
+       92    92    92    92
+       93    93    93    93
+       94    94    94    94
+       95    95    95    97
+       96    96    96    98
+       97    97    97    96
+       98    98    98    99
+       99    99    99    95
+      100   100   100   100
+      101   101   101   101
+      102   102   102   102
+      103   103   103   103
+      104   104   104   104
+      105   105   105   105
+      106   106   106   106
+      107   107   107   107
+      108   108   108   108
+      109   109   109   111
+      110   110   110   112
+      111   111   111   110
+      112   112   112   113
+      113   113   113   109
+      114   114   114   114
+      115   115   115   115
+      116   116   116   116
+      117   117   117   117
+      118   118   118   118
+      119   119   119   119
+      120   120   120   120
+      121   121   121   121
+      122   122   122   122
+      123   123   123   125
+      124   124   124   126
+      125   125   125   124
+      126   126   126   127
+      127   127   127   123
+      128   128   128   128
+      129   129   129   129
+      130   130   130   130
+      131   131   131   131
+      132   132   132   132
+      133   133   133   133
+      134   134   134   134
+      135   135   135   135
+      136   136   136   136
+      137   137   137   139
+      138   138   138   140
+      139   139   139   138
+      140   140   140   141
+      141   141   141   137
+      142   142   142   142
+      143   143   143   143
+      144   144   144   144
+      145   145   145   145
+      146   146   146   146
+      147   147   147   147
+      148   148   148   148
+      149   149   149   149
+      150   150   150   150
+      151   151   151   153
+      152   152   152   154
+      153   153   153   152
+      154   154   154   155
+      155   155   155   151
+      156   156   156   156
+      157   157   157   157
+      158   158   158   158
+      159   159   159   159
+      160   160   160   160
+      161   161   161   161
+      162   162   162   162
+      163   163   163   163
+      164   164   164   164
+      165   165   165   165
+      166   166   166   168
+      167   167   167   169
+      168   168   168   167
+      169   169   169   170
+      170   170   170   166
+
+
+                                      ICNTAO
+                                      ------
+
+        1     1
+        2     1
+        3     1
+        4     1
+        5     1
+        6     1
+        7     1
+        8     1
+        9     1
+       10     1
+       11     1
+       12     1
+       13     1
+       14     1
+       15     1
+       16     1
+       17     1
+       18     1
+       19     1
+       20     1
+       21     1
+       22     1
+       23     1
+       24     1
+       25     1
+       26     1
+       27     1
+       28     1
+       29     1
+       30     1
+       31     1
+       32     1
+       33     1
+       34     1
+       35     1
+       36     1
+       37     1
+       38     1
+       39     1
+       40     1
+       41     1
+       42     1
+       43     1
+       44     2
+       45     2
+       46     2
+       47     2
+       48     2
+       49     2
+       50     2
+       51     2
+       52     2
+       53     2
+       54     2
+       55     2
+       56     2
+       57     2
+       58     3
+       59     3
+       60     3
+       61     3
+       62     3
+       63     3
+       64     3
+       65     3
+       66     3
+       67     3
+       68     3
+       69     3
+       70     3
+       71     3
+       72     4
+       73     4
+       74     4
+       75     4
+       76     4
+       77     4
+       78     4
+       79     4
+       80     4
+       81     4
+       82     4
+       83     4
+       84     4
+       85     4
+       86     5
+       87     5
+       88     5
+       89     5
+       90     5
+       91     5
+       92     5
+       93     5
+       94     5
+       95     5
+       96     5
+       97     5
+       98     5
+       99     5
+      100     6
+      101     6
+      102     6
+      103     6
+      104     6
+      105     6
+      106     6
+      107     6
+      108     6
+      109     6
+      110     6
+      111     6
+      112     6
+      113     6
+      114     7
+      115     7
+      116     7
+      117     7
+      118     7
+      119     7
+      120     7
+      121     7
+      122     7
+      123     7
+      124     7
+      125     7
+      126     7
+      127     7
+      128     8
+      129     8
+      130     8
+      131     8
+      132     8
+      133     8
+      134     8
+      135     8
+      136     8
+      137     8
+      138     8
+      139     8
+      140     8
+      141     8
+      142     9
+      143     9
+      144     9
+      145     9
+      146     9
+      147     9
+      148     9
+      149     9
+      150     9
+      151     9
+      152     9
+      153     9
+      154     9
+      155     9
+      156    10
+      157    10
+      158    10
+      159    10
+      160    10
+      161    10
+      162    10
+      163    10
+      164    10
+      165    10
+      166    10
+      167    10
+      168    10
+      169    10
+      170    10
+
+
+ Copy of .mol input
+ ------------------
+
+
+--------------------------------------------------------------------------------
+ATOMBASIS                                                                       
+ Title                                                                          
+ Generated by the Dalton Input File Plugin for Avogadro                         
+ATOMTYPES=5 CHARGE=-1 NOSYMMETRY                                                
+Charge=26.0 Atoms=1 Basis=cc-pVDZ-DK_ogc                                        
+Fe          0.0009200000        0.0000000000        0.3778900000                
+Charge=7.0 Atoms=1 Basis=cc-pVDZ-DK_ogc                                         
+N           0.0006200000        0.0000000000        3.5154500000                
+Charge=6.0 Atoms=3 Basis=cc-pVDZ-DK_ogc                                         
+C           2.9985500000        0.0000000000       -1.1290600000                
+C          -1.4990000000       -2.5952000000       -1.1292800000                
+C          -1.4990000000        2.5952000000       -1.1292800000                
+Charge=8.0 Atoms=4 Basis=cc-pVDZ-DK_ogc                                         
+O          -2.5014200000       -4.3284200000       -2.0866700000                
+O          -2.5014200000        4.3284200000       -2.0866700000                
+O          -0.0002400000        0.0000000000        5.7744700000                
+O           5.0010000000        0.0000000000       -2.0859900000                
+Charge=26.0 Atoms=1 Basis=MINAO                                                 
+Fe00        0.0009200000        0.0000000000        0.3778900000                
+--------------------------------------------------------------------------------
+
+
+
+                     .---------------------------------------.
+                     | Starting in Integral Section (HERMIT) |
+                     `---------------------------------------'
+
+
+
+ ***************************************************************************************
+ ****************** Output from **INTEGRALS input processing (HERMIT) ******************
+ ***************************************************************************************
+
+
+ - Using defaults, no **INTEGRALS input found
+
+ Default print level:        1
+
+ Calculation of one-electron Hamiltonian integrals.
+
+ Center of mass  (bohr):      0.000376053966     -0.000000000000      0.190809748987
+ Operator center (bohr):      0.000000000000      0.000000000000      0.000000000000
+ Gauge origin    (bohr):      0.000000000000      0.000000000000      0.000000000000
+ Dipole origin   (bohr):      0.000000000000      0.000000000000      0.000000000000
+
+
+     ************************************************************************
+     ************************** Output from HERINT **************************
+     ************************************************************************
+
+
+
+                      Nuclear contribution to dipole moments
+                      --------------------------------------
+
+                 au               Debye          C m (/(10**-30)
+
+      x      0.03884000         0.09872143         0.32929923
+      y      0.00000000         0.00000000         0.00000000
+      z     20.05383000        50.97174836       170.02345122
+
+
+  Time used in ONEDRV     is       0.29 seconds
+  Time used in HUCKEL     is       0.14 seconds
+  Time used in QUADRUP    is       0.14 seconds
+  Time used in KINENE     is       0.15 seconds
+  Time used in GABGEN     is       0.56 seconds
+  Total CPU  time used in HERMIT:   1.62 seconds
+  Total wall time used in HERMIT:   1.62 seconds
+
+
+                        .----------------------------------.
+                        | End of Integral Section (HERMIT) |
+                        `----------------------------------'
+
+  Total CPU  time used in DALTON:   1.69 seconds
+  Total wall time used in DALTON:   1.71 seconds
+
+ 
+     Date and time (Linux)  : Sun Jun  9 15:50:59 2019
+     Host name              : s11p25.deic.sdu.dk                      

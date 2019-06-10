@@ -1,4 +1,5 @@
 import numpy as np
+from daltools import one
 
 
 def load_coordinates(load_file):
@@ -86,32 +87,11 @@ def load_symmetry(load_file):
         print("Could not find symmetry in Dalton output file")
         symmetry = False
     return symmetry
-     
-     
-def load_symmetry_orbital_definitions(load_file):
-    found_symmetry_orbitals = False
-    current_symmetry = 0
-    symmetry_orbital_definition = {}
-    for line in load_file:
-        if "Symmetry Orbitals" in line:
-            found_symmetry_orbitals = True
-        elif "Symmetries of electric field" in line or "Symmetry pointer indices" in line:
-            break
-        elif found_symmetry_orbitals:
-            if "Symmetry" in line:
-                current_symmetry += 1
-                symmetry_orbital_definition[current_symmetry] = []
-            elif len(line) > 25 and "orbitals" not in line:
-                symmetry_orbital_definition[current_symmetry].append([line[0:6].strip(),line[26:].strip()])
-    if found_symmetry_orbitals == False:
-        print("Could not find symmetry orbital in Dalton output file")
-        symmetry_orbital_definition = False
-    return symmetry_orbital_definition
     
     
-def load_punchout_mo_coefficients(load_file, number_orbitals):
+def load_punchout_mo_coefficients(load_file, number_basis_functions):
     mo_coefficients = {}
-    for i,orbitals in enumerate(number_orbitals, 1):
+    for i,orbitals in enumerate(number_basis_functions, 1):
         mo_coefficients[i] = np.zeros(orbitals*orbitals)
     idx = 0
     current_symmetry = 1
@@ -121,31 +101,67 @@ def load_punchout_mo_coefficients(load_file, number_orbitals):
         for i in range(0, len(line)-17, 18):
             mo_coefficients[current_symmetry][idx] = float(line[i:i+18])
             idx += 1
-        if number_orbitals[current_symmetry-1]**2 == idx:
+        if number_basis_functions[current_symmetry-1]**2 == idx:
             idx = 0
             current_symmetry += 1
-    for i,orbitals in enumerate(number_orbitals, 1):
+    for i,orbitals in enumerate(number_basis_functions, 1):
         mo_coefficients[i] = mo_coefficients[i].reshape((orbitals,orbitals)).T
     return mo_coefficients
     
     
-def load_symorder_to_aoorder(load_file):
-    found_orderings = False
-    ordering_converter = {}
-    for line in load_file:
-        if "i ->" in line:
-            found_orderings = True
-        elif "ICNTAO" in line or "Starting in" in line:
-            break
-        elif found_orderings:
-            if len(line) > 22 and "----" not in line:
-                orderings = line.split()
-                ordering_converter[int(orderings[0])] = int(orderings[1])
-    if found_orderings == False:
-        print("Could not find orbital orderings in Dalton output file")
+def load_aolabels(load_file, symmetry):
+    found_aolabels = False
+    aolabels = {}
+    current_symmetry = 0
+    if symmetry.lower() == "c1":
+        for line in load_file:
+            if "Contracted Orbitals" in line:
+                found_aolabels = True
+                aolabels[1] = []
+            elif "Orbital exponents and normalized contraction coefficients" in line:
+                break
+            elif found_aolabels and len(line) > 20 and "------" not in line:
+                atom = line.split()[1]
+                label = line.split()[2]
+                aolabels[1].append([atom, label])
+    else:
+        for line in load_file:
+            if "Symmetry Orbitals" in line:
+                found_aolabels = True
+            elif "Symmetries of electric field" in line or "Symmetry pointer indices" in line:
+                break
+            elif found_aolabels:
+                if "Symmetry" in line:
+                    current_symmetry += 1
+                    aolabels[current_symmetry] = []
+                elif len(line) > 25 and "orbitals" not in line:
+                    atom = line.split()[1]
+                    label = line.split()[2]
+                    aolabels[current_symmetry].append([atom, label])
+    if found_aolabels == False:
+        print("Could not find AO labels in Dalton output file")
         print("Have the calculation been run with:")
         print("*MOLBAS")
         print(".PRINT")
         print(" 10")
-        ordering_converter = False
-    return ordering_converter
+        aolabels = False
+    return aolabels
+    
+    
+def load_overlap_matrix(AOONEINT_file, number_basis_functions):
+    S_total = one.read(label='OVERLAP', filename=AOONEINT_file).unpack()
+    S_calculation = {}
+    S_reference = {}
+    S_mixed = {}
+    for i in range(len(number_basis_functions)):
+        numb_bf = number_basis_functions[i]
+        S_calculation[i+1] = np.array(S_total[i])[:numb_bf,:numb_bf:]
+        S_reference[i+1] = np.array(S_total[i])[numb_bf:,numb_bf:]
+        S_mixed[i+1] = np.array(S_total[i])[:numb_bf,numb_bf:]
+    return S_calculation, S_reference, S_mixed
+
+
+
+
+
+
