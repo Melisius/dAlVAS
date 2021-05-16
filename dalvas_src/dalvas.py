@@ -146,7 +146,7 @@ class DALVAS:
         print("")
 
     def print_RAS(self, eigenvalue_threshold: float = 0.1) -> None:
-        self.print_AVAS_eigenvalues(space_threshold=eigenvalue_threshold, silent=True)
+        self.print_AVAS_eigenvalues(space_eigenvalue_threshold=eigenvalue_threshold, silent=True)
         print("Partial Dalton input; Eigenvalue threshold of: {:02.3f}".format(eigenvalue_threshold))
         print("")
         print(".ELECTRONS")
