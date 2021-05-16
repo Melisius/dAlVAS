@@ -1,3 +1,4 @@
 *.pytest_cache*
 *__pycache__*
-data/temp/* 
+data/temp/*
+.mypy_cache 

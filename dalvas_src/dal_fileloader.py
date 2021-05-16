@@ -17,13 +17,13 @@ def load_coordinates(load_file):
             x = float(line[20:36])
             y = float(line[43:59])
             z = float(line[66:82])
-            Nxyz.append([N,x,y,z])
+            Nxyz.append([N, x, y, z])
     if found_coordinates == False:
         print("Could not find coordinates in Dalton output file")
         Nxyz = False
     return Nxyz
-    
-    
+
+
 def load_charge(load_file):
     found_charge = False
     for line in load_file:
@@ -35,8 +35,8 @@ def load_charge(load_file):
         print("Could not find charge in Dalton output file")
         charge = False
     return charge
-    
-    
+
+
 def load_number_orbitals(load_file):
     found_number_orbitals = False
     for line in load_file:
@@ -48,8 +48,8 @@ def load_number_orbitals(load_file):
         print("Could not find number of orbitals in Dalton output file")
         number_orbitals = False
     return number_orbitals
-    
-    
+
+
 def load_number_basis_functions(load_file):
     found_number_basis_functions = False
     for line in load_file:
@@ -61,8 +61,8 @@ def load_number_basis_functions(load_file):
         print("Could not find number of basis functions in Dalton output file")
         found_number_basis_functions = False
     return number_basis_functions
-    
-    
+
+
 def load_number_occupied_orbitals(load_file):
     found_occupations = False
     for line in load_file:
@@ -74,8 +74,8 @@ def load_number_occupied_orbitals(load_file):
         print("Could not find orbital occupations in Dalton output file")
         orbital_occupations = False
     return orbital_occupations
-    
-    
+
+
 def load_symmetry(load_file):
     found_symmetry = False
     for line in load_file:
@@ -87,28 +87,28 @@ def load_symmetry(load_file):
         print("Could not find symmetry in Dalton output file")
         symmetry = False
     return symmetry
-    
-    
+
+
 def load_punchout_mo_coefficients(load_file, number_basis_functions):
     mo_coefficients = {}
-    for i,orbitals in enumerate(number_basis_functions, 1):
-        mo_coefficients[i] = np.zeros(orbitals*orbitals)
+    for i, orbitals in enumerate(number_basis_functions, 1):
+        mo_coefficients[i] = np.zeros(orbitals * orbitals)
     idx = 0
     current_symmetry = 1
     for line in load_file:
         if "MOLORB" in line:
             continue
-        for i in range(0, len(line)-17, 18):
-            mo_coefficients[current_symmetry][idx] = float(line[i:i+18])
+        for i in range(0, len(line) - 17, 18):
+            mo_coefficients[current_symmetry][idx] = float(line[i : i + 18])
             idx += 1
-        if number_basis_functions[current_symmetry-1]**2 == idx:
+        if number_basis_functions[current_symmetry - 1] ** 2 == idx:
             idx = 0
             current_symmetry += 1
-    for i,orbitals in enumerate(number_basis_functions, 1):
-        mo_coefficients[i] = mo_coefficients[i].reshape((orbitals,orbitals)).T
+    for i, orbitals in enumerate(number_basis_functions, 1):
+        mo_coefficients[i] = mo_coefficients[i].reshape((orbitals, orbitals)).T
     return mo_coefficients
-    
-    
+
+
 def load_aolabels(load_file, symmetry):
     found_aolabels = False
     aolabels = {}
@@ -146,22 +146,16 @@ def load_aolabels(load_file, symmetry):
         print(" 10")
         aolabels = False
     return aolabels
-    
-    
+
+
 def load_overlap_matrix(AOONEINT_file, number_basis_functions):
-    S_total = one.read(label='OVERLAP', filename=AOONEINT_file).unpack()
+    S_total = one.read(label="OVERLAP", filename=AOONEINT_file).unpack()
     S_calculation = {}
     S_reference = {}
     S_mixed = {}
     for i in range(len(number_basis_functions)):
         numb_bf = number_basis_functions[i]
-        S_calculation[i+1] = np.array(S_total[i])[:numb_bf,:numb_bf:]
-        S_reference[i+1] = np.array(S_total[i])[numb_bf:,numb_bf:]
-        S_mixed[i+1] = np.array(S_total[i])[:numb_bf,numb_bf:]
+        S_calculation[i + 1] = np.array(S_total[i])[:numb_bf, :numb_bf:]
+        S_reference[i + 1] = np.array(S_total[i])[numb_bf:, numb_bf:]
+        S_mixed[i + 1] = np.array(S_total[i])[:numb_bf, numb_bf:]
     return S_calculation, S_reference, S_mixed
-
-
-
-
-
-
