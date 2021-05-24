@@ -105,6 +105,9 @@ class DALVAS:
 
     def punch_mo_coefficients(self, output_name: str = "MO_PUNCHIN") -> None:
         result_printer.punchin_mo_coefficients(self.AVAS_mo_coefficients, outfile_name=output_name)
+        
+    def return_punchin_mo_coefficients(self) -> str:
+        return result_printer.return_punchin_mo_coefficients(self.AVAS_mo_coefficients)
 
     def print_AVAS_eigenvalues(
         self,
@@ -146,31 +149,9 @@ class DALVAS:
         print("")
 
     def print_RAS(self, eigenvalue_threshold: float = 0.1) -> None:
-        self.print_AVAS_eigenvalues(space_eigenvalue_threshold=eigenvalue_threshold, silent=True)
         print("Partial Dalton input; Eigenvalue threshold of: {:02.3f}".format(eigenvalue_threshold))
         print("")
-        print(".ELECTRONS")
-        print(" " + str(int(np.sum(self._active_occupied)) * 2))
-        print(".INACTIVE")
-        print("", end=" ")
-        for i in range(0, len(self._active_occupied)):
-            print(str(int(self.number_occupied_orbitals[i] - self._active_occupied[i])), end=" ")
-        print("")
-        print(".RAS1 SPACE")
-        print("", end=" ")
-        for i in range(0, len(self._active_occupied)):
-            print(str(int(self._active_occupied[i])), end=" ")
-        print("")
-        print(".RAS2 SPACE")
-        print("", end=" ")
-        for i in range(0, len(self._active_occupied)):
-            print(0, end=" ")
-        print("")
-        print(".RAS3 SPACE")
-        print("", end=" ")
-        for i in range(0, len(self._active_occupied)):
-            print(str(int(self._active_virtuel[i])), end=" ")
-        print("")
+        print(self.return_RAS(eigenvalue_threshold=eigenvalue_threshold))
 
     def set_atomic_valence_selection(self, label_dict):
         picked_array = {}
@@ -196,3 +177,26 @@ class DALVAS:
         if Input_C_diag > 10 ** -4:
             print("Input MO coefficients does not diagonalize the overlap matrix.")
             print("Max deviation from input coefficient diagalization of Overlap:", Input_C_diag)
+
+    def return_RAS(self, eigenvalue_threshold: float = 0.1) -> str:
+        self.print_AVAS_eigenvalues(space_eigenvalue_threshold=eigenvalue_threshold, silent=True)
+        partial_ras_input = ""
+        partial_ras_input += ".ELECTRONS\n"
+        partial_ras_input += f" {int(np.sum(self._active_occupied)) * 2}\n"
+        partial_ras_input += ".INACTIVE\n"
+        for i in range(0, len(self._active_occupied)):
+            partial_ras_input += f" {int(self.number_occupied_orbitals[i] - self._active_occupied[i])}"
+        partial_ras_input += "\n"
+        partial_ras_input += ".RAS1 SPACE\n"
+        for i in range(0, len(self._active_occupied)):
+            partial_ras_input += f" {int(self._active_occupied[i])}"
+        partial_ras_input += "\n"
+        partial_ras_input += ".RAS2 SPACE\n"
+        for i in range(0, len(self._active_occupied)):
+           partial_ras_input += " 0"
+        partial_ras_input += "\n"
+        partial_ras_input += ".RAS3 SPACE\n"
+        for i in range(0, len(self._active_occupied)):
+            partial_ras_input += f" {int(self._active_virtuel[i])}"
+        partial_ras_input += "\n"
+        return partial_ras_input

@@ -29,6 +29,33 @@ def punchin_mo_coefficients(CMO, outfile_name):
     outfile.close()
 
 
+def return_punchin_mo_coefficients(CMO):
+    mo_out = ""
+    mo_out += "**MOLORB"
+    for sym in range(1, len(CMO) + 1):
+        if isinstance(CMO[sym], bool):
+            continue
+        number_orbitals = len(CMO[sym])
+        for i in range(0, number_orbitals):
+            mo_out += "\n"
+            for j in range(0, number_orbitals):
+                if j != 0 and j % 4 == 0:
+                    mo_out += "\n"
+                if np.max(np.abs(CMO[sym][:, i])) < 100:
+                    mo_out += "{0:18.14f}".format(CMO[sym][j, i])
+                elif np.max(np.abs(CMO[sym][:, i])) < 1000:
+                    mo_out += "{0:18.13f}".format(CMO[sym][j, i])
+                elif np.max(np.abs(CMO[sym][:, i])) < 10000:
+                    mo_out += "{0:18.12f}".format(CMO[sym][j, i])
+                elif np.max(np.abs(CMO[sym][:, i])) < 100000:
+                    mo_out += "{0:18.11f}".format(CMO[sym][j, i])
+                elif np.max(np.abs(CMO[sym][:, i])) < 1000000:
+                    mo_out += "{0:18.10f}".format(CMO[sym][j, i])
+                else:
+                    print("MO coefficient to large, punchin file will be broken")
+    mo_out += "\n"
+    return mo_out
+
 def format_AVAS_eigenvalues(occ_eigenvalues, virt_eigenvalues, print_threshold):
     occ_eigenvalues_all = np.zeros((len(occ_eigenvalues[1]), 2))
     occ_eigenvalues_all[:, 0] = occ_eigenvalues[1]
